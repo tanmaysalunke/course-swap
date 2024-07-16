@@ -1,0 +1,427 @@
+[
+    {
+        "Course": "CSE 507 Image Processing and Analysis",
+        "Number": "81888",
+        "Instructor": "Jianming Liang"
+    },
+    {
+        "Course": "CSE 511 Data Processing at Scale",
+        "Number": "69438",
+        "Instructor": "Ali Altunkaya"
+    },
+    {
+        "Course": "CSE 511 Data Processing at Scale",
+        "Number": "87431",
+        "Instructor": "Zhichao Cao"
+    },
+    {
+        "Course": "CSE 511 Data Processing at Scale",
+        "Number": "87519",
+        "Instructor": "Samira Ghayekhloo"
+    },
+    {
+        "Course": "CSE 511 Data Processing at Scale",
+        "Number": "87520",
+        "Instructor": "Samira Ghayekhloo"
+    },
+    {
+        "Course": "CSE 512 Distributed Database Systems",
+        "Number": "65688",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 515 Multimedia and Web Databases",
+        "Number": "80376",
+        "Instructor": "K. Selcuk Candan"
+    },
+    {
+        "Course": "CSE 520 Computer Architecture II",
+        "Number": "76920",
+        "Instructor": "Aviral Shrivastava"
+    },
+    {
+        "Course": "CSE 522 Real-Time Embedded Systems",
+        "Number": "80374",
+        "Instructor": "Hokeun Kim"
+    },
+    {
+        "Course": "CSE 531 Distributed and Multiprocessor Operating Systems",
+        "Number": "74204",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 534 Advanced Computer Networks",
+        "Number": "78019",
+        "Instructor": "Violet Syrotiuk"
+    },
+    {
+        "Course": "CSE 535 Mobile Computing",
+        "Number": "64777",
+        "Instructor": "Jaejong Baek"
+    },
+    {
+        "Course": "CSE 535 Mobile Computing",
+        "Number": "74020",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 536 Advanced Operating Systems",
+        "Number": "81340",
+        "Instructor": "Adil Ahmad"
+    },
+    {
+        "Course": "CSE 539 Applied Cryptography",
+        "Number": "70297",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 539 Applied Cryptography",
+        "Number": "75446",
+        "Instructor": "Ni Trieu"
+    },
+    {
+        "Course": "CSE 543 Information Assurance and Security",
+        "Number": "69175",
+        "Instructor": "Stephen Yau"
+    },
+    {
+        "Course": "CSE 543 Information Assurance and Security",
+        "Number": "72917",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 543 Information Assurance and Security",
+        "Number": "78006",
+        "Instructor": "Stephen Yau"
+    },
+    {
+        "Course": "CSE 543 Information Assurance and Security",
+        "Number": "86696",
+        "Instructor": "Jaejong Baek"
+    },
+    {
+        "Course": "CSE 545 Software Security",
+        "Number": "61876",
+        "Instructor": "Tiffany Bao"
+    },
+    {
+        "Course": "CSE 545 Software Security",
+        "Number": "80530",
+        "Instructor": "Tiffany Bao"
+    },
+    {
+        "Course": "CSE 546 Cloud Computing",
+        "Number": "77177",
+        "Instructor": "Yuli Deng"
+    },
+    {
+        "Course": "CSE 548 Advanced Computer Network Security",
+        "Number": "74021",
+        "Instructor": "Soumya Indela"
+    },
+    {
+        "Course": "CSE 551 Foundations of Algorithms",
+        "Number": "71794",
+        "Instructor": "Ali Altunkaya"
+    },
+    {
+        "Course": "CSE 551 Foundations of Algorithms",
+        "Number": "78178",
+        "Instructor": "Ali Altunkaya"
+    },
+    {
+        "Course": "CSE 551 Foundations of Algorithms",
+        "Number": "81465",
+        "Instructor": "Arunabha Sen"
+    },
+    {
+        "Course": "CSE 551 Foundations of Algorithms",
+        "Number": "84114",
+        "Instructor": "Ali Altunkaya"
+    },
+    {
+        "Course": "CSE 559 Algorithms in Computational Biology",
+        "Number": "80371",
+        "Instructor": "Heewook Lee"
+    },
+    {
+        "Course": "CSE 563 Software Requirements and Specification",
+        "Number": "74866",
+        "Instructor": "Lynn Robert Carter"
+    },
+    {
+        "Course": "CSE 563 Software Requirements and Specification",
+        "Number": "77301",
+        "Instructor": "Lynn Robert Carter"
+    },
+    {
+        "Course": "CSE 564 Software Design",
+        "Number": "71860",
+        "Instructor": "Lynn Robert Carter"
+    },
+    {
+        "Course": "CSE 564 Software Design",
+        "Number": "77307",
+        "Instructor": "Lynn Robert Carter"
+    },
+    {
+        "Course": "CSE 565 Software Verification, Validation, and Testing",
+        "Number": "64790",
+        "Instructor": "Ayca Tuzmen"
+    },
+    {
+        "Course": "CSE 565 Software Verification, Validation, and Testing",
+        "Number": "65737",
+        "Instructor": "James Collofello"
+    },
+    {
+        "Course": "CSE 565 Software Verification, Validation, and Testing",
+        "Number": "71793",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 565 Software Verification, Validation, and Testing",
+        "Number": "76895",
+        "Instructor": "James Collofello"
+    },
+    {
+        "Course": "CSE 565 Software Verification, Validation, and Testing",
+        "Number": "77303",
+        "Instructor": "James Collofello"
+    },
+    {
+        "Course": "CSE 566 Software Project, Process, and Quality Management",
+        "Number": "87069",
+        "Instructor": "Nouh Alhindawi"
+    },
+    {
+        "Course": "CSE 568 Biocomputing",
+        "Number": "85864",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 569 Fundamentals of Statistical Learning and Pattern Recognition",
+        "Number": "65125",
+        "Instructor": "Baoxin Li"
+    },
+    {
+        "Course": "CSE 570 Advanced Computer Graphics I",
+        "Number": "77900",
+        "Instructor": "Yalin Wang"
+    },
+    {
+        "Course": "CSE 571 Artificial Intelligence",
+        "Number": "70298",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 571 Artificial Intelligence",
+        "Number": "72436",
+        "Instructor": "Siddharth Srivastava"
+    },
+    {
+        "Course": "CSE 572 Data Mining",
+        "Number": "70602",
+        "Instructor": "Yanjie Fu"
+    },
+    {
+        "Course": "CSE 572 Data Mining",
+        "Number": "74019",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 572 Data Mining",
+        "Number": "87432",
+        "Instructor": "Hua Wei"
+    },
+    {
+        "Course": "CSE 574 Planning and Learning Methods in AI",
+        "Number": "77178",
+        "Instructor": "Subbarao Kambhampati"
+    },
+    {
+        "Course": "CSE 575 Statistical Machine Learning",
+        "Number": "66946",
+        "Instructor": "Kookjin Lee"
+    },
+    {
+        "Course": "CSE 575 Statistical Machine Learning",
+        "Number": "69439",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 575 Statistical Machine Learning",
+        "Number": "78091",
+        "Instructor": "Yingzhen Yang"
+    },
+    {
+        "Course": "CSE 576 Topics in Natural Language Processing",
+        "Number": "71542",
+        "Instructor": "Chitta Baral"
+    },
+    {
+        "Course": "CSE 578 Data Visualization",
+        "Number": "87278",
+        "Instructor": "Chris Bryan"
+    },
+    {
+        "Course": "CSE 579 Knowledge Representation and Reasoning",
+        "Number": "77372",
+        "Instructor": "Samira Ghayekhloo"
+    },
+    {
+        "Course": "CSE 579 Knowledge Representation and Reasoning",
+        "Number": "78392",
+        "Instructor": "Samira Ghayekhloo"
+    },
+    {
+        "Course": "CSE 580 Practicum",
+        "Number": "62432",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 580 Practicum",
+        "Number": "63540",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 584 Topic: Curricular Practical Training Internship",
+        "Number": "62434",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 584 Topic: Curricular Practical Training Internship",
+        "Number": "68395",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 590 Reading and Conference",
+        "Number": "62431",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 593 Applied Project",
+        "Number": "62112",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 595 Continuing Registration",
+        "Number": "61741",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 595 Continuing Registration",
+        "Number": "75682",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 595 Continuing Registration",
+        "Number": "78779",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 598 Topic: Distributed Software Development",
+        "Number": "69353",
+        "Instructor": "Yinong Chen"
+    },
+    {
+        "Course": "CSE 598 Topic: Advanced Software Analysis and Design",
+        "Number": "70849",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 598 Topic: Engineering Blockchain Applications",
+        "Number": "72720",
+        "Instructor": "Swathi Punathumkandi"
+    },
+    {
+        "Course": "CSE 598 Topic: Computing for Data-Driven Optimization",
+        "Number": "81094",
+        "Instructor": "Geunyeong Byeon"
+    },
+    {
+        "Course": "CSE 598 Topic: Statistical Learning Theory",
+        "Number": "87547",
+        "Instructor": "Yingzhen Yang"
+    },
+    {
+        "Course": "CSE 598 Topic: Applied Vulnerability Research",
+        "Number": "87602",
+        "Instructor": "Adam Doupé"
+    },
+    {
+        "Course": "CSE 598 Topic: Probabilistic Reasoning and Learning",
+        "Number": "87703",
+        "Instructor": "YooJung Choi"
+    },
+    {
+        "Course": "CSE 598 Topic: Quantum Computation",
+        "Number": "87994",
+        "Instructor": "Zilin Jiang"
+    },
+    {
+        "Course": "CSE 598 Topic: Frontier Topics in GenAI",
+        "Number": "88065",
+        "Instructor": "'YZ' Yezhou Yang"
+    },
+    {
+        "Course": "CSE 599 Thesis",
+        "Number": "61742",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 599 Thesis",
+        "Number": "75664",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 599 Thesis",
+        "Number": "83085",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 691 Topic: SCAI Fulton Fellows Training",
+        "Number": "82327",
+        "Instructor": "Ross Maciejewski"
+    },
+    {
+        "Course": "CSE 790 Reading and Conference",
+        "Number": "62474",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 790 Reading and Conference",
+        "Number": "67176",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 792 Research",
+        "Number": "61743",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 792 Research",
+        "Number": "68387",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 795 Continuing Registration",
+        "Number": "61744",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 795 Continuing Registration",
+        "Number": "78780",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 799 Dissertation",
+        "Number": "61745",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 799 Dissertation",
+        "Number": "70915",
+        "Instructor": "Not Listed"
+    }
+]

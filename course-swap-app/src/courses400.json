@@ -1,0 +1,287 @@
+[
+    {
+        "Course": "CSE 412 Database Management",
+        "Number": "73064",
+        "Instructor": "Gennaro De Luca"
+    },
+    {
+        "Course": "CSE 412 Database Management",
+        "Number": "76119",
+        "Instructor": "Gennaro De Luca"
+    },
+    {
+        "Course": "CSE 420 Computer Architecture I",
+        "Number": "64595",
+        "Instructor": "Aviral Shrivastava"
+    },
+    {
+        "Course": "CSE 423 Systems Capstone Project I",
+        "Number": "60460",
+        "Instructor": "Steven Osburn"
+    },
+    {
+        "Course": "CSE 424 Systems Capstone Project II",
+        "Number": "62710",
+        "Instructor": "Steven Osburn"
+    },
+    {
+        "Course": "CSE 434 Computer Networks",
+        "Number": "60461",
+        "Instructor": "Violet Syrotiuk"
+    },
+    {
+        "Course": "CSE 445 Distributed Software Development",
+        "Number": "60462",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 445 Distributed Software Development",
+        "Number": "76120",
+        "Instructor": "Yinong Chen"
+    },
+    {
+        "Course": "CSE 445 Distributed Software Development",
+        "Number": "86378",
+        "Instructor": "Yinong Chen"
+    },
+    {
+        "Course": "CSE 446 Software Integration and Engineering",
+        "Number": "86381",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 450 Design and Analysis of Algorithms",
+        "Number": "60463",
+        "Instructor": "Andrea Richa"
+    },
+    {
+        "Course": "CSE 460 Software Analysis and Design",
+        "Number": "60464",
+        "Instructor": "Hessam Sarjoughian"
+    },
+    {
+        "Course": "CSE 460 Software Analysis and Design",
+        "Number": "86382",
+        "Instructor": "Janaka Balasooriya"
+    },
+    {
+        "Course": "CSE 463 Introduction to Human Computer Interaction",
+        "Number": "66833",
+        "Instructor": "Robert Atkinson"
+    },
+    {
+        "Course": "CSE 463 Introduction to Human Computer Interaction",
+        "Number": "80159",
+        "Instructor": "Hasti Seifi"
+    },
+    {
+        "Course": "CSE 464 Software Quality Assurance and Testing",
+        "Number": "63161",
+        "Instructor": "Janaka Balasooriya"
+    },
+    {
+        "Course": "CSE 464 Software Quality Assurance and Testing",
+        "Number": "78384",
+        "Instructor": "Xusheng Xiao"
+    },
+    {
+        "Course": "CSE 466 Computer Systems Security",
+        "Number": "77384",
+        "Instructor": "Adam Doup\u00e9"
+    },
+    {
+        "Course": "CSE 466 Computer Systems Security",
+        "Number": "77385",
+        "Instructor": "Adam Doup\u00e9"
+    },
+    {
+        "Course": "CSE 467 Data and Information Security",
+        "Number": "86370",
+        "Instructor": "Rakibul Hasan"
+    },
+    {
+        "Course": "CSE 468 Computer Network Security",
+        "Number": "78381",
+        "Instructor": "Jedidiah Crandall"
+    },
+    {
+        "Course": "CSE 469 Computer and Network Forensics",
+        "Number": "86694",
+        "Instructor": "Jaejong Baek"
+    },
+    {
+        "Course": "CSE 469 Computer and Network Forensics",
+        "Number": "87401",
+        "Instructor": "Jaejong Baek"
+    },
+    {
+        "Course": "CSE 471 Introduction to Artificial Intelligence",
+        "Number": "86384",
+        "Instructor": "Paulo Shakarian"
+    },
+    {
+        "Course": "CSE 471 Introduction to Artificial Intelligence",
+        "Number": "86703",
+        "Instructor": "Paulo Shakarian"
+    },
+    {
+        "Course": "CSE 472 Social Media Mining",
+        "Number": "69174",
+        "Instructor": "Huan Liu"
+    },
+    {
+        "Course": "CSE 475 Foundations of Machine Learning",
+        "Number": "74432",
+        "Instructor": "Robert Atkinson"
+    },
+    {
+        "Course": "CSE 475 Foundations of Machine Learning",
+        "Number": "81366",
+        "Instructor": "Hannah Kerner"
+    },
+    {
+        "Course": "CSE 475 Foundations of Machine Learning",
+        "Number": "81369",
+        "Instructor": "Hannah Kerner"
+    },
+    {
+        "Course": "CSE 477 Introduction to Computer-Aided Geometric Design",
+        "Number": "65603",
+        "Instructor": "Dianne Hansford"
+    },
+    {
+        "Course": "CSE 478 Foundations of Data Visualization",
+        "Number": "87282",
+        "Instructor": "Chris Bryan"
+    },
+    {
+        "Course": "CSE 484 Topic: Department",
+        "Number": "62433",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 485 Computer Science Capstone Project I",
+        "Number": "60465",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 485 Computer Science Capstone Project I",
+        "Number": "64054",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 485 Computer Science Capstone Project I",
+        "Number": "64061",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 485 Computer Science Capstone Project I",
+        "Number": "66945",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 485 Computer Science Capstone Project I",
+        "Number": "68583",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 485 Computer Science Capstone Project I",
+        "Number": "69873",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 485 Computer Science Capstone Project I",
+        "Number": "69874",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 485 Computer Science Capstone Project I",
+        "Number": "76118",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 485 Computer Science Capstone Project I",
+        "Number": "84113",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 485 Computer Science Capstone Project I",
+        "Number": "86983",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 485 Computer Science Capstone Project I",
+        "Number": "87679",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 485 Computer Science Capstone Project I",
+        "Number": "87680",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 486 Computer Science Capstone Project II",
+        "Number": "66552",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 486 Computer Science Capstone Project II",
+        "Number": "68584",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 486 Computer Science Capstone Project II",
+        "Number": "68585",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 486 Computer Science Capstone Project II",
+        "Number": "68993",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 486 Computer Science Capstone Project II",
+        "Number": "69872",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 486 Computer Science Capstone Project II",
+        "Number": "73081",
+        "Instructor": "Maria Elena Chavez Echeagaray"
+    },
+    {
+        "Course": "CSE 492 Honors Directed Study",
+        "Number": "61739",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 492 Honors Directed Study",
+        "Number": "63539",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 493 Honors Thesis",
+        "Number": "61740",
+        "Instructor": "Not Listed"
+    },
+    {
+        "Course": "CSE 494 Topic: Algorithms in Computational Biology",
+        "Number": "74259",
+        "Instructor": "Heewook Lee"
+    },
+    {
+        "Course": "CSE 494 Topic: Advanced Computer Graphics I",
+        "Number": "78069",
+        "Instructor": "Yalin Wang"
+    },
+    {
+        "Course": "CSE 494 Topic: Image Processing and Analysis",
+        "Number": "88016",
+        "Instructor": "Jianming Liang"
+    },
+    {
+        "Course": "CSE 499 Individualized Instruction",
+        "Number": "62430",
+        "Instructor": "Not Listed"
+    }
+]
