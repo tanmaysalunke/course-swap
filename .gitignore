@@ -1,2 +1,2 @@
 course-swap-backend/config/firebaseServiceAccountKey.json
-.env
+course-swap-backend/.env
