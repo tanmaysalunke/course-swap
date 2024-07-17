@@ -10,8 +10,6 @@ const User = require("./models/User");
 const findMatches = require("./tasks/findMatches");
 const filterMatches = require("./tasks/filterMatches");
 const admin = require("./firebaseAdmin");
-require("dotenv").config();
-console.log("Refresh Token:", process.env.GMAIL_REFRESH_TOKEN);
 const Match = require("./models/Match");
 const { createTransporter } = require("./config/mailer");
 
@@ -65,6 +63,7 @@ io.on("connection", (socket) => {
       console.log("Sending email to:", ownerEmail);
 
       // Send an email to the ownerEmail in the matchDetails
+      const transporter = await createTransporter();
       transporter.sendMail(
         {
           from: "chknxnugget4@gmail.com", // Make sure this email is correct and authorized in your Ethereal account
