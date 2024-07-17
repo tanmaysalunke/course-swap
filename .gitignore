@@ -1,3 +1,5 @@
 course-swap-backend/config/firebaseServiceAccountKey.json
 course-swap-backend/.env
 course-swap-app/src/config/Firebase.ts
+course-swap-backend/config/auth.js
+course-swap-backend/config/mailer.js

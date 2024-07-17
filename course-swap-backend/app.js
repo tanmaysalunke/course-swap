@@ -10,29 +10,20 @@ const User = require("./models/User");
 const findMatches = require("./tasks/findMatches");
 const filterMatches = require("./tasks/filterMatches");
 const admin = require("./firebaseAdmin");
-const nodemailer = require("nodemailer");
 require("dotenv").config();
 console.log("Refresh Token:", process.env.GMAIL_REFRESH_TOKEN);
 const Match = require("./models/Match");
+const { createTransporter } = require("./config/mailer");
 
-// Create a transporter for Nodemailer
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    type: "OAuth2",
-    user: "chknxnugget4@gmail.com",
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    refreshToken: process.env.GMAIL_REFRESH_TOKEN,
-  },
-});
 // Verify transporter configuration
-transporter.verify(function (error, success) {
-  if (error) {
-    console.error("Transporter verification failed:", error);
-  } else {
-    console.log("Transporter is ready to send messages");
-  }
+createTransporter().then((transporter) => {
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error("Transporter verification failed:", error);
+    } else {
+      console.log("Transporter is ready to send emails");
+    }
+  });
 });
 
 const app = express();
