@@ -177,11 +177,3 @@ select:focus {
   padding: 20px;
   z-index: 1000;
 }
-
-.icon-button-image {
-  background-image: url("../public/icons/notification.svg");
-  background-size: cover;
-  width: 24px; /* Adjust icon size as needed */
-  height: 24px;
-  display: block;
-}

@@ -3,13 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../config/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../config/Firebase";
-import io from "socket.io-client";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const socket = io("http://localhost:5000", {
-  transports: ["websocket", "polling"],
-});
+import { useSocket } from "../config/SocketContext";
 
 interface Course {
   _id: string;
@@ -48,6 +44,7 @@ function Profile() {
   const [showPopup, setShowPopup] = useState(false);
   const [notifCount, setNotifCount] = useState(0);
   const [matchDetails, setMatchDetails] = useState<Match[]>([]);
+  const { socket } = useSocket();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -104,23 +101,31 @@ function Profile() {
 
   //Socket.io
   useEffect(() => {
-    // Listen for new connection requests
-    socket.on("matchDetails", (data) => {
-      console.log("Match details received:", data);
-      setMatchDetails(data);
-      console.log(data.ownerEmail);
-      showMatchDetailsToast(data);
-    });
+    if (socket) {
+      socket.on("matchInvalidated", (data) => {
+        alert(data.message); // Handle the event
+      });
 
-    return () => {
-      socket.off("matchDetails");
-    };
-  }, []);
+      return () => {
+        socket.off("matchInvalidated");
+      };
+    }
+  }, [socket]);
 
   useEffect(() => {
-    socket.on("matchInvalidated", (data) => {
-      alert(data.message); // or update a state to display in the UI
-    });
+    if (socket) {
+      socket.on("matchDetails", (data) => {
+        setNotifCount(data.length);
+      });
+    }
+  }, [socket]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("matchInvalidated", (data) => {
+        alert(data.message); // or update a state to display in the UI
+      });
+    }
   }, [socket]);
 
   const showMatchDetailsToast = (matchDetails: Match) => {
@@ -141,9 +146,12 @@ function Profile() {
   };
 
   const handleRequestToConnect = (match: Match) => {
-    socket.emit("requestToConnect", {
-      _id: match._id,
-    });
+    if (socket) {
+      socket.emit("requestToConnect", {
+        _id: match._id,
+      });
+      console.log("request sent to node app");
+    }
   };
 
   if (loading) {
@@ -156,95 +164,73 @@ function Profile() {
 
   return (
     <div className="container mx-auto px-4 py-6 flex flex-col items-center">
-      <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">
+      <h1 className="text-4xl font-bold text-center text-gray-900 mb-12">
         Profile Page
       </h1>
-      <ToastContainer />
-      <div className="flex justify-center py-4">
-        <button
-          className="icon-button-image relative p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition duration-300"
-          onClick={() => setShowPopup(true)}
-        >
-          {notifCount > 0 && (
-            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold">
-              {notifCount}
-            </span>
-          )}
-        </button>
-      </div>
-      <div>
-        {showPopup && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg shadow-xl p-6 max-w-lg w-full">
-              <h2 className="text-xl text-gray-700 font-semibold mb-4">
-                Match Results
-              </h2>
-              <ul className="space-y-4">
-                {matches.map((match, index) => (
-                  <li key={index} className="p-2 hover:bg-gray-100 rounded">
-                    <span className="text-gray-600">
-                      Someone has course {match.wantedCourse.number} which you
-                      want.
-                    </span>
-                    <div className="pt-2">
-                      <button
-                        className="bg-blue-800 hover:bg-blue-900 active:bg-blue-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
-                        onClick={() => {
-                          handleRequestToConnect(match);
-                          console.log(match.wantedCourse.number);
-                        }}
-                      >
-                        Request to Connect
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-              <button
-                onClick={() => setShowPopup(false)}
-                className="mt-4 w-full text-white bg-red-500 hover:bg-red-600 font-bold py-2 px-4 rounded transition duration-300"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
 
-      <div className="flex flex-col md:flex-row justify-around items-start p-4 space-y-4 md:space-y-0 md:space-x-4 w-full max-w-6xl">
-        <div className="bg-white shadow-lg p-6 rounded-lg w-full md:w-1/3 text-left">
-          <p className="text-gray-600">
-            <strong>Name:</strong> {user.displayName || "N/A"}
-          </p>
-          <p className="text-gray-600">
-            <strong>Email:</strong> {user.email || "N/A"}
-          </p>
-          {user.photoURL && (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
+        {/* Personal Info Card */}
+        <div className="bg-white shadow-lg p-6 rounded-lg space-y-4">
+          <div className="text-center">
             <img
-              src={user.photoURL}
+              src={user.photoURL || "https://via.placeholder.com/150"}
               alt="Profile"
               className="rounded-full w-32 h-32 object-cover mx-auto"
             />
-          )}
+            <p className="mt-4 text-lg font-semibold text-gray-800">
+              {user.displayName || "N/A"}
+            </p>
+          </div>
+          <div className="text-gray-600">
+            <strong>Email:</strong> {user.email}
+          </div>
         </div>
-        <div className="flex flex-col space-y-4 w-full md:w-1/3">
+
+        {/* Have and Want Courses */}
+        <div className="col-span-2 space-y-6">
           <div className="bg-white shadow-lg p-6 rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-700 mb-3">Have</h3>
-            {hcourses.map((course) => (
-              <div key={course._id} className="text-gray-800">
-                {course.course}-{course.number}
-              </div>
-            ))}
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+              Have Courses
+            </h3>
+            <div className="">
+              {hcourses.map((course) => (
+                <div key={course._id} className="text-gray-800 py-1">
+                  {course.course} - {course.number}
+                </div>
+              ))}
+            </div>
           </div>
           <div className="bg-white shadow-lg p-6 rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-700 mb-3">Want</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+              Want Courses
+            </h3>
             {wcourses.map((course) => (
-              <div key={course._id} className="text-gray-600">
-                {course.course}-{course.number}
+              <div key={course._id} className="text-gray-600 py-1">
+                {course.course} - {course.number}
               </div>
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Match Results */}
+      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-4xl mt-6">
+        <h2 className="text-xl font-semibold text-gray-800">Match Results</h2>
+        <ul className="space-y-4 mt-4">
+          {matches.map((match, index) => (
+            <li key={index} className="p-4 rounded hover:bg-gray-100">
+              <span className="text-gray-800">
+                Someone has course {match.wantedCourse.number} which you want.
+              </span>
+              <button
+                className="ml-4 bg-blue-800 hover:bg-blue-900 active:bg-blue-900 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+                onClick={() => handleRequestToConnect(match)}
+              >
+                Request to Connect
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

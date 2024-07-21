@@ -3,15 +3,19 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cron = require("node-cron");
+
 const Course = require("./models/Course");
+const Notification = require("./models/Notification");
+const User = require("./models/User");
+
 const cors = require("cors");
 const scrapeCourses = require("./tasks/scrapeCourses");
-const User = require("./models/User");
 const findMatches = require("./tasks/findMatches");
 const filterMatches = require("./tasks/filterMatches");
 const admin = require("./firebaseAdmin");
 const Match = require("./models/Match");
 const { createTransporter } = require("./config/mailer");
+const { createNotification } = require("./config/notification");
 
 // Verify transporter configuration
 createTransporter().then((transporter) => {
@@ -34,7 +38,9 @@ const io = socketIo(server, {
   cors: {
     origin: "http://localhost:3000", // The origin where your React app is running
     methods: ["GET", "POST"],
+    credentials: true,
   },
+  transports: ["websocket", "polling"],
 });
 
 app.use(express.json());
@@ -66,7 +72,7 @@ io.on("connection", (socket) => {
       const transporter = await createTransporter();
       transporter.sendMail(
         {
-          from: "chknxnugget4@gmail.com", // Make sure this email is correct and authorized in your Ethereal account
+          from: "chknxnugget4@gmail.com", // Make sure this email is correct and authorized
           to: ownerEmail, // This needs to be a valid email address
           subject: "New Connection Request",
           text: `You have a new connection request from ${matchDetails[0].requesterEmail}. Please log in to respond.`,
@@ -82,9 +88,31 @@ io.on("connection", (socket) => {
           }
         }
       );
+      // Save notification
+      const message = `You have a new connection request from ${matchDetails[0].requesterEmail}.`;
+      await createNotification(
+        matchDetails[0].ownerEmail,
+        matchDetails[0].requesterEmail,
+        message
+      );
     } catch (error) {
-      console.error("Error fetching match details:", error);
-      socket.emit("error", "Failed to fetch match details");
+      console.error("Error fetching match details or sending email:", error);
+      socket.emit("error", "Failed to process connection request");
+    }
+  });
+
+  // Listener to send notifications on request
+  socket.on("requestNotifications", async (ownerEmail) => {
+    try {
+      console.log("Fetching notifications for:", ownerEmail);
+      const notifications = await Notification.find({ ownerEmail }).sort({
+        createdAt: -1,
+      });
+      // console.log("Fetched notifications:", notifications);
+      socket.emit("updateNotifications", notifications);
+    } catch (error) {
+      console.error("Error sending notifications", error);
+      socket.emit("notificationError", "Failed to fetch notifications.");
     }
   });
 
@@ -257,6 +285,22 @@ app.get("/api/personalcourses", async (req, res) => {
 });
 
 // Send Matches found
+app.get("/api/matches", authenticate, async (req, res) => {
+  try {
+    if (!req.user.email) {
+      return res
+        .status(400)
+        .send("Authentication is required to access matches.");
+    }
+    const matches = await filterMatches(req.user.email);
+    res.json(matches);
+  } catch (error) {
+    console.error("Error fetching matches:", error);
+    res.status(500).send("Failed to fetch matches due to an internal error.");
+  }
+});
+
+// Send Connection Request
 app.get("/api/matches", authenticate, async (req, res) => {
   try {
     if (!req.user.email) {

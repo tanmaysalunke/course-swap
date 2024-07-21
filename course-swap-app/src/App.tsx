@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import CourseList from "./pages/CourseList";
 import Login from "./pages/Login";
 import Contact from "./pages/Contact";
+import { SocketProvider } from "./config/SocketContext";
 
 function App() {
   const [user] = useAuthState(auth);
@@ -37,16 +38,18 @@ function App() {
     <div className="App">
       <Router>
         <AuthProvider>
-          <div className="App">
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/courses" element={<CourseList />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/contact" element={<Contact />} />
-            </Routes>
-          </div>
+          <SocketProvider>
+            <div className="App">
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/courses" element={<CourseList />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/contact" element={<Contact />} />
+              </Routes>
+            </div>
+          </SocketProvider>
         </AuthProvider>
       </Router>
     </div>
