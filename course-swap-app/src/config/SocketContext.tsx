@@ -3,11 +3,36 @@ import io, { Socket } from "socket.io-client";
 import { auth } from "../config/Firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
+interface History {
+  event: String;
+  timestamp: Date;
+  description: String;
+}
+
+interface Course {
+  _id: string;
+  course: string;
+  number: string;
+  instructor: string;
+}
+
+interface Match {
+  requesterEmail: string;
+  wantedCourse: Course;
+  ownerEmail: string;
+  ownerCourse: Course;
+  status: string;
+  history: History[];
+}
+
 interface Notification {
-  id: string;
+  _id: string;
   message: string;
   read: boolean;
   createdAt: Date;
+  ownerEmail: string;
+  requesterEmail: string;
+  match: Match;
 }
 
 interface ContextType {
@@ -47,9 +72,13 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     });
 
     newSocket.on("updateNotifications", (newNotifications: Notification[]) => {
-      // console.log("Received notifications:", newNotifications);
+      console.log("Received notifications:", newNotifications);
       setNotifications(newNotifications);
-      setNotifCount(newNotifications.length);
+      const unreadNotifications = newNotifications.filter(
+        (notification) => !notification.read
+      );
+
+      setNotifCount(unreadNotifications.length);
     });
 
     newSocket.on("connect_error", (error) => {

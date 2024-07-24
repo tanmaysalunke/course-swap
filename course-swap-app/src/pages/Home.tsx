@@ -6,11 +6,11 @@ import { useAuthState } from "react-firebase-hooks/auth";
 const HomePage = () => {
   const [user] = useAuthState(auth);
   return (
-    <div className="home">
-      <header className="home-header">
-        <h1>Welcome to Course Swap</h1>
-        <p>Exchange courses easily with your peers!</p>
-      </header>
+    <div className="container mx-auto px-4 py-6 flex flex-col items-center">
+      <h1 className="text-4xl font-bold text-center text-gray-900 mb-12">
+        Welcome to Course Swap
+      </h1>
+      <p>Exchange courses easily with your peers!</p>
       <section className="how-it-works">
         <h2>How It Works</h2>
         <p>

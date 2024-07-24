@@ -4,10 +4,22 @@ import { auth } from "../config/Firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
 import { useSocket } from "../config/SocketContext";
+import Modal from "./Modal";
 
 const Navbar = () => {
   const [user] = useAuthState(auth);
   const { notifCount, notifications } = useSocket();
+  // const [showNotifDetail, setShowNotifDetail] = useState(false);
+  const { socket } = useSocket();
+  const [selectedNotification, setSelectedNotification] = useState<any | null>(
+    null
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleNotificationClick = (notification: any) => {
+    setSelectedNotification(notification);
+    setIsModalOpen(true);
+  };
 
   const signUserOut = async () => {
     await signOut(auth);
@@ -21,6 +33,18 @@ const Navbar = () => {
 
   const toggleNotifPanel = () => {
     setShowNotifPanel(!showNotifPanel);
+  };
+
+  const onNotifAccept = (notifId: string) => {
+    if (socket) {
+      socket.emit("notificationAccepted", notifId);
+    }
+    setIsModalOpen(false);
+  };
+  const onNotifReject = (notifId: string) => {
+    if (socket) {
+      socket.emit("notificationRejected", notifId);
+    }
   };
 
   return (
@@ -74,12 +98,68 @@ const Navbar = () => {
                     <h2 className="text-lg font-semibold">Notifications</h2>
                     <ul className="space-y-4 mt-4">
                       {notifications.map((notif, index) => (
-                        <li
-                          key={index}
-                          className="p-4 rounded hover:bg-gray-100"
-                        >
-                          {notif.message}
-                        </li>
+                        <div>
+                          {notif.read === true ? (
+                            <li
+                              key={index}
+                              className="p-4 rounded bg-gray-100 text-gray-600"
+                            >
+                              {notif.message}
+                            </li>
+                          ) : (
+                            <li
+                              key={index}
+                              className="p-4 rounded hover:bg-gray-100 cursor-pointer"
+                              onClick={() => handleNotificationClick(notif)}
+                            >
+                              {notif.message}
+                            </li>
+                          )}
+                          <Modal
+                            isOpen={isModalOpen}
+                            onClose={() => setIsModalOpen(false)}
+                          >
+                            {selectedNotification && (
+                              <div>
+                                <p>
+                                  {selectedNotification.requesterEmail} wants to
+                                  connect for{" "}
+                                  {
+                                    selectedNotification.match.wantedCourse
+                                      .course
+                                  }{" "}
+                                  -{" "}
+                                  {
+                                    selectedNotification.match.wantedCourse
+                                      .number
+                                  }
+                                  .
+                                </p>
+                                <div className="flex flex-row justify-evenly pt-4">
+                                  <button
+                                    className="bg-teal-600 hover:bg-teal-700 active:bg-teal-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                    onClick={() => {
+                                      onNotifAccept(notif._id);
+                                    }}
+                                  >
+                                    Accept
+                                  </button>
+                                  <button
+                                    className="bg-red-600 hover:bg-red-700 active:bg-teal-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                    onClick={() => {
+                                      onNotifReject(notif._id);
+                                    }}
+                                  >
+                                    Reject
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </Modal>
+                          {/* {showNotifDetail && (
+                            
+                          )} */}
+                        </div>
                       ))}
                     </ul>
                   </div>
@@ -93,9 +173,9 @@ const Navbar = () => {
                   alt="Profile"
                 />
                 {isOpen && (
-                  <div className="absolute mt-12 right-0 top-4 bg-white shadow-lg rounded-md py-2">
+                  <div className="absolute mt-12 right-0 top-4 bg-white shadow-lg rounded-md">
                     <button
-                      className="text-black px-4 py-2 hover:bg-gray-100 w-full text-left"
+                      className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                       onClick={signUserOut}
                     >
                       Logout

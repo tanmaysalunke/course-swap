@@ -93,7 +93,8 @@ io.on("connection", (socket) => {
       await createNotification(
         matchDetails[0].ownerEmail,
         matchDetails[0].requesterEmail,
-        message
+        message,
+        matchDetails[0]
       );
     } catch (error) {
       console.error("Error fetching match details or sending email:", error);
@@ -105,14 +106,50 @@ io.on("connection", (socket) => {
   socket.on("requestNotifications", async (ownerEmail) => {
     try {
       console.log("Fetching notifications for:", ownerEmail);
-      const notifications = await Notification.find({ ownerEmail }).sort({
-        createdAt: -1,
-      });
-      // console.log("Fetched notifications:", notifications);
+      const notifications = await Notification.find({
+        ownerEmail: ownerEmail,
+        // read: false,
+      })
+        .populate({
+          path: "match",
+          populate: {
+            path: "wantedCourse ownerCourse",
+            model: "Course",
+          },
+        })
+        .sort({ createdAt: -1 });
       socket.emit("updateNotifications", notifications);
     } catch (error) {
       console.error("Error sending notifications", error);
       socket.emit("notificationError", "Failed to fetch notifications.");
+    }
+  });
+
+  // Handle Notification accept or reject
+  socket.on("notificationAccepted", async (notifId) => {
+    try {
+      const notification = await Notification.findOne({ _id: notifId }).sort({
+        createdAt: -1,
+      });
+      const match = await Match.updateOne(
+        { _id: notification.match._id },
+        {
+          $set: { status: "completed" },
+          $push: {
+            history: {
+              event: "completed",
+              timestamp: new Date(),
+              description: "Match completed due to acceptance of match.",
+            },
+          },
+        }
+      );
+      notification.read = true;
+      await notification.save();
+      console.log("updated and saved notif read status", notification.read);
+    } catch (error) {
+      console.error("Error Accepting notifications", error);
+      socket.emit("notificationError", "Failed to accpet notifications.");
     }
   });
 

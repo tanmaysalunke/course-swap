@@ -152,6 +152,7 @@ function Profile() {
       });
       console.log("request sent to node app");
     }
+    showMatchDetailsToast(match);
   };
 
   if (loading) {
@@ -167,7 +168,7 @@ function Profile() {
       <h1 className="text-4xl font-bold text-center text-gray-900 mb-12">
         Profile Page
       </h1>
-
+      <ToastContainer />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
         {/* Personal Info Card */}
         <div className="bg-white shadow-lg p-6 rounded-lg space-y-4">
