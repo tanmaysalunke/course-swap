@@ -7,6 +7,7 @@ const cron = require("node-cron");
 const Course = require("./models/Course");
 const Notification = require("./models/Notification");
 const User = require("./models/User");
+const Token = require("./models/Token");
 
 const cors = require("cors");
 const scrapeCourses = require("./tasks/scrapeCourses");
@@ -16,17 +17,6 @@ const admin = require("./firebaseAdmin");
 const Match = require("./models/Match");
 const { createTransporter } = require("./config/mailer");
 const { createNotification } = require("./config/notification");
-
-// Verify transporter configuration
-createTransporter().then((transporter) => {
-  transporter.verify((error, success) => {
-    if (error) {
-      console.error("Transporter verification failed:", error);
-    } else {
-      console.log("Transporter is ready to send emails");
-    }
-  });
-});
 
 const app = express();
 
@@ -158,25 +148,37 @@ io.on("connection", (socket) => {
   });
 });
 
+// MongoDB
 const uri = process.env.MONGO_URI;
 mongoose
-  .connect(uri, {
-    serverSelectionTimeoutMS: 5000, // Timeout after 5000ms instead of the default 30000ms
+  .connect(process.env.MONGO_URI)
+  .then(async () => {
+    console.log("MongoDB connected");
+
+    const existingToken = await Token.findOne();
+    if (!existingToken) {
+      const initialTokens = {
+        refreshToken: process.env.INIT_REFRESH_TOKEN,
+        updatedAt: new Date(),
+      };
+      const token = new Token(initialTokens);
+      await token.save();
+    }
+
+    // Example usage of createTransporter
+    const transporter = await createTransporter();
+    if (transporter) {
+      console.log("Email transporter created successfully.");
+    } else {
+      console.error("Failed to create email transporter.");
+    }
   })
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
-});
-
-// Optional: Create a new route to check the database connection
-app.get("/db-status", (req, res) => {
-  if (mongoose.connection.readyState === 1) {
-    res.send("Connected to MongoDB!");
-  } else {
-    res.send("Not connected to MongoDB.");
-  }
 });
 
 // Middleware to authenticate and set user context
