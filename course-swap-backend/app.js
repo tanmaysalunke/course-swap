@@ -143,6 +143,33 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("notificationRejected", async (notifId) => {
+    try {
+      const notification = await Notification.findOne({ _id: notifId }).sort({
+        createdAt: -1,
+      });
+      const match = await Match.updateOne(
+        { _id: notification.match._id },
+        {
+          $set: { status: "rejected" },
+          $push: {
+            history: {
+              event: "rejected",
+              timestamp: new Date(),
+              description: "Match rejected by course owner.",
+            },
+          },
+        }
+      );
+      notification.read = true;
+      await notification.save();
+      console.log("updated and saved notif read status", notification.read);
+    } catch (error) {
+      console.error("Error Accepting notifications", error);
+      socket.emit("notificationError", "Failed to accpet notifications.");
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log("Client disconnected");
   });
