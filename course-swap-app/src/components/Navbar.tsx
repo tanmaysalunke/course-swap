@@ -35,16 +35,21 @@ const Navbar = () => {
     setShowNotifPanel(!showNotifPanel);
   };
 
-  const onNotifAccept = (notifId: string) => {
+  const onNotifAccept = (
+    notifId: string,
+    requesterEmail: string,
+    ownerEmail: string
+  ) => {
     if (socket) {
-      socket.emit("notificationAccepted", notifId);
+      socket.emit("notificationAccepted", notifId, requesterEmail, ownerEmail);
     }
     setIsModalOpen(false);
   };
-  const onNotifReject = (notifId: string) => {
+  const onNotifReject = (notifId2: string, requesterEmail: string) => {
     if (socket) {
-      socket.emit("notificationRejected", notifId);
+      socket.emit("notificationRejected", notifId2, requesterEmail);
     }
+    setIsModalOpen(false);
   };
 
   return (
@@ -101,14 +106,14 @@ const Navbar = () => {
                         <div>
                           {notif.read === true ? (
                             <li
-                              key={index}
+                              key={notif.match._id}
                               className="p-4 rounded bg-gray-100 text-gray-600"
                             >
                               {notif.message}
                             </li>
                           ) : (
                             <li
-                              key={index}
+                              key={notif.match._id}
                               className="p-4 rounded hover:bg-gray-100 cursor-pointer"
                               onClick={() => handleNotificationClick(notif)}
                             >
@@ -139,15 +144,22 @@ const Navbar = () => {
                                   <button
                                     className="bg-teal-600 hover:bg-teal-700 active:bg-teal-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                     onClick={() => {
-                                      onNotifAccept(notif._id);
+                                      onNotifAccept(
+                                        selectedNotification._id,
+                                        selectedNotification.requesterEmail,
+                                        selectedNotification.ownerEmail
+                                      );
                                     }}
                                   >
                                     Accept
                                   </button>
                                   <button
-                                    className="bg-red-600 hover:bg-red-700 active:bg-teal-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                    className="bg-red-600 hover:bg-red-700 active:bg-red-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                     onClick={() => {
-                                      onNotifReject(notif._id);
+                                      onNotifReject(
+                                        selectedNotification._id,
+                                        selectedNotification.requesterEmail
+                                      );
                                     }}
                                   >
                                     Reject
@@ -156,9 +168,6 @@ const Navbar = () => {
                               </div>
                             )}
                           </Modal>
-                          {/* {showNotifDetail && (
-                            
-                          )} */}
                         </div>
                       ))}
                     </ul>

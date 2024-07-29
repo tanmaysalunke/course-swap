@@ -17,6 +17,7 @@ interface Course {
 }
 
 interface Match {
+  _id: string;
   requesterEmail: string;
   wantedCourse: Course;
   ownerEmail: string;

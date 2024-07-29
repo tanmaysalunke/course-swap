@@ -116,36 +116,61 @@ io.on("connection", (socket) => {
   });
 
   // Handle Notification accept or reject
-  socket.on("notificationAccepted", async (notifId) => {
-    try {
-      const notification = await Notification.findOne({ _id: notifId }).sort({
-        createdAt: -1,
-      });
-      const match = await Match.updateOne(
-        { _id: notification.match._id },
-        {
-          $set: { status: "completed" },
-          $push: {
-            history: {
-              event: "completed",
-              timestamp: new Date(),
-              description: "Match completed due to acceptance of match.",
+  socket.on(
+    "notificationAccepted",
+    async (notifId, requesterEmail, ownerEmail) => {
+      try {
+        console.log("Fetching Notification ID: ", notifId);
+        const notification = await Notification.findOne({ _id: notifId }).sort({
+          createdAt: -1,
+        });
+        const match = await Match.updateOne(
+          { _id: notification.match._id },
+          {
+            $set: { status: "completed" },
+            $push: {
+              history: {
+                event: "completed",
+                timestamp: new Date(),
+                description: "Match completed due to acceptance of match.",
+              },
             },
+          }
+        );
+        notification.read = true;
+        await notification.save();
+        // Send an email to the requesterEmail for match accepted
+        const transporter = await createTransporter();
+        transporter.sendMail(
+          {
+            from: "chknxnugget4@gmail.com", // Make sure this email is correct and authorized
+            to: requesterEmail, // This needs to be a valid email address
+            subject: "Connection Request Accepted",
+            text: `Your connection request from has been accepted! Here are the contact Details of the Course Owner: ${ownerEmail}.`,
+            html: `<p>Your connection request from has been accepted!<br>Here are the contact Details of the Course Owner: <strong>${ownerEmail}</strong>.</p>`,
           },
-        }
-      );
-      notification.read = true;
-      await notification.save();
-      console.log("updated and saved notif read status", notification.read);
-    } catch (error) {
-      console.error("Error Accepting notifications", error);
-      socket.emit("notificationError", "Failed to accpet notifications.");
+          (error, info) => {
+            if (error) {
+              console.error("Mail could not be sent:", error);
+              socket.emit("error", "Failed to send email");
+            } else {
+              console.log("Message sent: %s", info.messageId);
+              socket.emit("matchDetails", matchDetails[0]); // Send successful match details back to the requester
+            }
+          }
+        );
+        console.log("updated and saved notif read status", notification.read);
+      } catch (error) {
+        console.error("Error Accepting notifications", error);
+        socket.emit("notificationError", "Failed to accpet notifications.");
+      }
     }
-  });
+  );
 
-  socket.on("notificationRejected", async (notifId) => {
+  socket.on("notificationRejected", async (notifId2, requesterEmail) => {
     try {
-      const notification = await Notification.findOne({ _id: notifId }).sort({
+      console.log("Fetching Notification ID: ", notifId2);
+      const notification = await Notification.findOne({ _id: notifId2 }).sort({
         createdAt: -1,
       });
       const match = await Match.updateOne(
@@ -163,6 +188,28 @@ io.on("connection", (socket) => {
       );
       notification.read = true;
       await notification.save();
+      console.log("Sending email to:", requesterEmail); //deleete this line
+      // Send an email to the requesterEmail for match accepted
+      const transporter = await createTransporter();
+      transporter.sendMail(
+        {
+          from: "chknxnugget4@gmail.com",
+          to: requesterEmail,
+          subject: "Connection Request Rejected",
+          text: `Unfortunately your course match request from has been rejected.`,
+          html: `<p>Unfortunately your course match request from has been rejected.</p>`,
+        },
+        (error, info) => {
+          if (error) {
+            console.error("Mail could not be sent:", error);
+            socket.emit("error", "Failed to send email");
+          } else {
+            console.log("Message sent: %s", info.messageId);
+            socket.emit("matchDetails", matchDetails[0]); // Send successful match details back to the requester
+          }
+        }
+      );
+      // console.log("Notification for course", notification);
       console.log("updated and saved notif read status", notification.read);
     } catch (error) {
       console.error("Error Accepting notifications", error);
