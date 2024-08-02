@@ -41,23 +41,26 @@ function Profile() {
   const [user] = useAuthState(auth);
   const [data, setData] = useState<UserData | null>(null);
   const [matches, setMatches] = useState<Match[]>([]);
-  const [showPopup, setShowPopup] = useState(false);
+  // const [showPopup, setShowPopup] = useState(false);
   const [notifCount, setNotifCount] = useState(0);
-  const [matchDetails, setMatchDetails] = useState<Match[]>([]);
+  // const [matchDetails, setMatchDetails] = useState<Match[]>([]);
   const { socket } = useSocket();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      console.log("Loading:", loading);
-      console.log("Auth Token:", authToken);
-      setTimeout(() => {
-        if (!loading && !authToken) {
-          navigate("/login");
-        }
-      }, 2000);
+    const checkAuth = () => {
+      if (!loading && !authToken) {
+        console.log(
+          "Redirecting to login because no auth token is found and loading is complete."
+        );
+        navigate("/login");
+      }
     };
 
-    checkAuth();
+    const timer = setTimeout(() => {
+      checkAuth();
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, [authToken, loading, navigate]);
 
   useEffect(() => {

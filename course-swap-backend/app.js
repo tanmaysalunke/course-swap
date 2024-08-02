@@ -217,6 +217,42 @@ io.on("connection", (socket) => {
     }
   });
 
+  // Emit Top 3 Wanted Courses
+  const fetchFeaturedCourses = async (socket) => {
+    let featuredCourses = []; // Define outside to access later
+    try {
+      featuredCourses = await User.aggregate([
+        { $unwind: "$wantCourses" }, // Deconstruct the wantCourses array
+        { $group: { _id: "$wantCourses", count: { $sum: 1 } } }, // Group by courseId and count occurrences
+        { $sort: { count: -1 } }, // Sort by count in descending order
+        { $limit: 3 }, // Limit to top 3
+        {
+          $lookup: {
+            // Join with Course collection to get details
+            from: "courses", // The collection to join
+            localField: "_id", // Field from the input documents
+            foreignField: "_id", // Field from the documents of the "from" collection
+            as: "courseDetails", // The array field that will contain the joined documents
+          },
+        },
+        { $unwind: "$courseDetails" }, // Unwind the courseDetails if necessary
+      ]);
+      // Emit the results through the socket only if there are courses
+      if (featuredCourses.length) {
+        socket.emit("setFeaturedCourses", featuredCourses);
+      }
+    } catch (err) {
+      console.error("Error fetching featured courses:", err);
+      socket.emit(
+        "errorFetchingCourses",
+        "Failed to fetch featured courses due to an error."
+      );
+    }
+  };
+
+  // Example of calling this function in response to a socket event
+  socket.on("requestFeaturedCourses", () => fetchFeaturedCourses(socket));
+
   socket.on("disconnect", () => {
     console.log("Client disconnected");
   });

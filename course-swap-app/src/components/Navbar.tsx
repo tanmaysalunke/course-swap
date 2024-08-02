@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { auth } from "../config/Firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
@@ -53,13 +54,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900">
+    <nav className="border-gray-200 bg-gray-900">
       {/*  ----------Site Name and Logo---------- */}
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <button
-          onClick={(e) => e.preventDefault()}
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
+      <div className="max-w-screen-xl flex flex-wrap justify-between mx-auto p-4">
+        <div className="flex items-center space-x-3 rtl:space-x-reverse">
           <img
             src="https://flowbite.com/docs/images/logo.svg"
             className="h-8"
@@ -68,7 +66,50 @@ const Navbar = () => {
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             Course Swap
           </span>
-        </button>
+          {/*  ----------Menu---------- */}
+          <div
+            className="items-center justify-between pl-20 hidden w-full md:flex md:w-auto md:order-1"
+            id="navbar-cta"
+          >
+            <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+              <li>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    isActive ? "active-link" : "inactive-link"
+                  }
+                  aria-current="page"
+                >
+                  Home
+                </NavLink>
+              </li>
+              <li>
+                {user && (
+                  <NavLink
+                    to="/profile"
+                    className={({ isActive }) =>
+                      isActive ? "active-link" : "inactive-link"
+                    }
+                  >
+                    Profile
+                  </NavLink>
+                )}
+              </li>
+              <li>
+                {user && (
+                  <NavLink
+                    to="/courses"
+                    className={({ isActive }) =>
+                      isActive ? "active-link" : "inactive-link"
+                    }
+                  >
+                    Courses
+                  </NavLink>
+                )}
+              </li>
+            </ul>
+          </div>
+        </div>
 
         {/*  ----------Profile Icon---------- */}
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
@@ -194,52 +235,6 @@ const Navbar = () => {
               </div>
             </div>
           )}
-        </div>
-
-        {/*  ----------Menu---------- */}
-        <div
-          className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
-          id="navbar-cta"
-        >
-          <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-            <li>
-              <Link
-                to="/"
-                className="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:dark:text-blue-500"
-                aria-current="page"
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              {user && (
-                <Link
-                  to="/profile"
-                  className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                >
-                  Profile
-                </Link>
-              )}
-            </li>
-            <li>
-              {user && (
-                <Link
-                  to="/courses"
-                  className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                >
-                  Courses
-                </Link>
-              )}
-            </li>
-            <li>
-              <Link
-                to="/contact"
-                className="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-              >
-                Contact
-              </Link>
-            </li>
-          </ul>
         </div>
       </div>
     </nav>

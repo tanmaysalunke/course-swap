@@ -1,0 +1,24 @@
+services:
+  backend:
+    build:
+      context: ./course-swap-backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    command: /bin/sh -c "env && node app.js"
+    env_file:
+      - ./course-swap-backend/.env
+    networks:
+      - app-network
+  frontend:
+    build: 
+      context: ./course-swap-app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

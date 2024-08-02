@@ -177,3 +177,15 @@ select:focus {
   padding: 20px;
   z-index: 1000;
 }
+
+.active-link {
+  color: #0784fb; /* Active color */
+}
+
+.inactive-link {
+  color: white; /* Inactive color */
+}
+
+.inactive-link:hover {
+  color: #0784fb;
+}

@@ -4,6 +4,7 @@ import { auth } from "../config/Firebase";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuth } from "../config/AuthContext";
 import axios from "axios";
 
 // Interface for skeleton on Course
@@ -17,6 +18,8 @@ const CourseList = () => {
   const [selected, setSelected] = useState<string>("all-classes");
 
   const [courses, setCourses] = useState<Course[]>([]);
+
+  const { authToken, loading } = useAuth();
 
   useEffect(() => {
     fetch("http://localhost:5000/api/courses")
@@ -86,21 +89,33 @@ const CourseList = () => {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        navigate("/login"); // Redirect to login if no user is authenticated
+    const checkAuth = () => {
+      if (!loading && !authToken) {
+        console.log(
+          "Redirecting to login because no auth token is found and loading is complete."
+        );
+        navigate("/login");
       }
-    });
-  });
+    };
+
+    const timer = setTimeout(() => {
+      checkAuth();
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [authToken, loading, navigate]);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   if (!user) {
-    // Optionally handle the rendering while waiting for the useEffect to execute
     return <div>Redirecting to login...</div>;
   }
 
   const handleSubmit = async () => {
     const payload = {
-      email: user.email,
-      uid: user.uid,
+      email: user?.email,
+      uid: user?.uid,
       haveCourses,
       wantCourses,
     };

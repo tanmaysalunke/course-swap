@@ -66,7 +66,7 @@ async function refreshAccessToken() {
       console.error(
         "Refresh token is invalid or expired. User re-authentication required."
       );
-      // Handle re-authentication logic if needed
+      // Optionally trigger an alert or notification for re-authentication
     }
     return null;
   }
