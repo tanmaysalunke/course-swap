@@ -23,10 +23,10 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          docker build -t myuser/myapp-frontend:${{ github.sha }} ./course-swap-app
-          docker build -t myuser/myapp-backend:${{ github.sha }} ./course-swap-backend
-          docker push myuser/myapp-frontend:${{ github.sha }}
-          docker push myuser/myapp-backend:${{ github.sha }}
+          docker build -t tanmaysalunke/myapp-frontend:${{ github.sha }} ./course-swap-app
+          docker build -t tanmaysalunke/myapp-backend:${{ github.sha }} ./course-swap-backend
+          docker push tanmaysalunke/myapp-frontend:${{ github.sha }}
+          docker push tanmaysalunke/myapp-backend:${{ github.sha }}
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
@@ -35,6 +35,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            docker pull myuser/myapp-frontend:${{ github.sha }}
-            docker pull myuser/myapp-backend:${{ github.sha }}
+            docker pull tanmaysalunke/myapp-frontend:${{ github.sha }}
+            docker pull tanmaysalunke/myapp-backend:${{ github.sha }}
             docker-compose -f /path/to/your/docker-compose.yml up -d
