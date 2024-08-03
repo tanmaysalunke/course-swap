@@ -28,27 +28,6 @@ jobs:
           docker push tanmaysalunke/myapp-frontend:${{ github.sha }}
           docker push tanmaysalunke/myapp-backend:${{ github.sha }}
 
-      - name: Create .env file for React app
-        run: |
-          echo "REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}" > .env
-          echo "REACT_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}" >> .env
-          echo "REACT_APP_FIREBASE_PROJECT_ID=${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}" >> .env
-          echo "REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}" >> .env
-          echo "REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}" >> .env
-          echo "REACT_APP_FIREBASE_APP_ID=${{ secrets.REACT_APP_FIREBASE_APP_ID }}" >> .env
-          echo "REACT_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.REACT_APP_FIREBASE_MEASUREMENT_ID }}" >> .env
-        working-directory: ./course-swap-app
-
-      - name: Create .env file for Node app
-        run: |
-          echo "APP_PASSWORD=${{ secrets.APP_PASSWORD }}" > .env
-          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env
-          echo "INIT_REFRESH_TOKEN=${{ secrets.INIT_REFRESH_TOKEN }}" >> .env
-          echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> .env
-          echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> .env
-          echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> .env
-        working-directory: ./course-swap-backend
-
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -56,6 +35,30 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            mkdir -p /var/www/CourseSwapApp/course-swap-app
+            mkdir -p /var/www/CourseSwapApp/course-swap-backend
+
+            # Create .env for frontend
+            echo "REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}" > /var/www/CourseSwapApp/course-swap-app/.env
+            echo "REACT_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}" >> /var/www/CourseSwapApp/course-swap-app/.env
+            echo "REACT_APP_FIREBASE_PROJECT_ID=${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}" >> /var/www/CourseSwapApp/course-swap-app/.env
+            echo "REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}" >> /var/www/CourseSwapApp/course-swap-app/.env
+            echo "REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}" >> /var/www/CourseSwapApp/course-swap-app/.env
+            echo "REACT_APP_FIREBASE_APP_ID=${{ secrets.REACT_APP_FIREBASE_APP_ID }}" >> /var/www/CourseSwapApp/course-swap-app/.env
+            echo "REACT_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.REACT_APP_FIREBASE_MEASUREMENT_ID }}" >> /var/www/CourseSwapApp/course-swap-app/.env
+
+            # Create .env for backend
+            echo "APP_PASSWORD=${{ secrets.APP_PASSWORD }}" > /var/www/CourseSwapApp/course-swap-backend/.env
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> /var/www/CourseSwapApp/course-swap-backend/.env
+            echo "INIT_REFRESH_TOKEN=${{ secrets.INIT_REFRESH_TOKEN }}" >> /var/www/CourseSwapApp/course-swap-backend/.env
+            echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> /var/www/CourseSwapApp/course-swap-backend/.env
+            echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> /var/www/CourseSwapApp/course-swap-backend/.env
+            echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> /var/www/CourseSwapApp/course-swap-backend/.env
+
+            # Pull Docker images and run docker-compose
             docker pull tanmaysalunke/myapp-frontend:${{ github.sha }}
             docker pull tanmaysalunke/myapp-backend:${{ github.sha }}
-            docker-compose -f /var/www/docker-compose.yml up -d
+            docker-compose -f /var/www/CourseSwapApp/docker-compose.yml up -d
+
+            # Debug: Check directory and files
+            ls -al /var/www/CourseSwapApp
