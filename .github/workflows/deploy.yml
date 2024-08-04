@@ -23,8 +23,8 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          docker build -t tanmaysalunke/myapp-frontend:${{ github.sha }} ./course-swap-app
-          docker build -t tanmaysalunke/myapp-backend:${{ github.sha }} ./course-swap-backend
+          docker build --no-cache --pull -t tanmaysalunke/myapp-frontend:${{ github.sha }} ./course-swap-app
+          docker build --no-cache --pull -t tanmaysalunke/myapp-backend:${{ github.sha }} ./course-swap-backend
           docker push tanmaysalunke/myapp-frontend:${{ github.sha }}
           docker push tanmaysalunke/myapp-backend:${{ github.sha }}
 
