@@ -54,4 +54,4 @@ jobs:
 
       - name: Run the backend Docker container
         run: |
-          docker run -d -p 5000:5000 --name reactBackendContainer tanmaysalunke/myapp-backend:${{ github.sha }}
+          docker run -d -p 5000:5000 --name reactBackendContainer -e APP_PASSWORD=='${{secrets.APP_PASSWORD}}' tanmaysalunke/myapp-backend:${{ github.sha }}
