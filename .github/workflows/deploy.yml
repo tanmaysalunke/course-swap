@@ -38,14 +38,25 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-            echo ${{ secrets.APP_PASSWORD }} | docker secret create app_password -
-            echo ${{ secrets.MONGO_URI }} | docker secret create mongo_uri -
-            echo ${{ secrets.INIT_REFRESH_TOKEN }} | docker secret create init_refresh_token -
-            echo ${{ secrets.CLIENT_ID }} | docker secret create client_id -
-            echo ${{ secrets.CLIENT_SECRET }} | docker secret create client_secret -
-            echo ${{ secrets.REDIRECT_URI }} | docker secret create redirect_uri -
-            echo ${{ secrets.FIREBASE_SERVICE_ACCOUNT }} | docker secret create firebase_service_account -
-            echo ${{ secrets.BACKEND_ENV }} | docker secret create backend_env -
+            set -e
+
+            # Remove existing secrets (if any)
+            docker secret rm app_password || true
+            docker secret rm mongo_uri || true
+            docker secret rm init_refresh_token || true
+            docker secret rm client_id || true
+            docker secret rm client_secret || true
+            docker secret rm redirect_uri || true
+            docker secret rm firebase_service_account || true
+              
+            # Create new secrets
+            echo "${{ secrets.APP_PASSWORD }}" | docker secret create app_password -
+            echo "${{ secrets.MONGO_URI }}" | docker secret create mongo_uri -
+            echo "${{ secrets.INIT_REFRESH_TOKEN }}" | docker secret create init_refresh_token -
+            echo "${{ secrets.CLIENT_ID }}" | docker secret create client_id -
+            echo "${{ secrets.CLIENT_SECRET }}" | docker secret create client_secret -
+            echo "${{ secrets.REDIRECT_URI }}" | docker secret create redirect_uri -
+            echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" | docker secret create firebase_service_account -
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.7
