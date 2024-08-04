@@ -39,6 +39,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             set -e
+            # Disable strict host key checking
+            mkdir -p ~/.ssh
+            echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
 
             # Create backend_env file
             echo "APP_PASSWORD=${{ secrets.APP_PASSWORD }}" > backend_env
@@ -50,7 +53,7 @@ jobs:
             echo "FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" >> backend_env
 
             # Transfer backend_env to EC2
-            scp backend_env ubuntu@${{ secrets.HOST }}:/home/ubuntu/backend_env
+            scp -o StrictHostKeyChecking=no backend_env ubuntu@${{ secrets.HOST }}:/home/ubuntu/backend_env
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.7
