@@ -28,50 +28,19 @@ jobs:
           docker push tanmaysalunke/myapp-frontend:${{ github.sha }}
           docker push tanmaysalunke/myapp-backend:${{ github.sha }}
 
-      - name: Copy docker-compose.yml to EC2
+      - name: Copy files to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          source: "docker-compose.yml"
+          source: |
+            ./course-swap-app/Dockerfile
+            ./course-swap-backend/Dockerfile
+            ./course-swap-app/package*.json
+            ./course-swap-backend/package*.json
+            ./docker-compose.yml
           target: "/var/www/CourseSwapApp/"
-
-      - name: Copy frontend/Dockerfile to EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "./course-swap-app/Dockerfile"
-          target: "/var/www/CourseSwapApp/course-swap-app/"
-
-      - name: Copy backend package files to EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "./course-swap-backend/package*.json"
-          target: "/var/www/CourseSwapApp/course-swap-backend/"
-
-      - name: Copy frontend package files to EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "./course-swap-app/package*.json"
-          target: "/var/www/CourseSwapApp/course-swap-app/"
-
-      - name: Copy backend/Dockerfile to EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "./course-swap-backend/Dockerfile"
-          target: "/var/www/CourseSwapApp/course-swap-backend/"
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
@@ -80,6 +49,11 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+
+            # Ensure Docker and Docker Compose are installed
+            sudo apt-get update && sudo apt-get install -y docker.io docker-compose
+
+            # Setup environment and directories 
             mkdir -p /var/www/CourseSwapApp/course-swap-app
             mkdir -p /var/www/CourseSwapApp/course-swap-backend
 
@@ -102,9 +76,14 @@ jobs:
             echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> /var/www/CourseSwapApp/course-swap-backend/.env
 
             # Pull Docker images and run docker-compose
-            docker pull tanmaysalunke/myapp-frontend:${{ github.sha }}
-            docker pull tanmaysalunke/myapp-backend:${{ github.sha }}
-            docker-compose -f /var/www/CourseSwapApp/docker-compose.yml up -d
+            # docker pull tanmaysalunke/myapp-frontend:${{ github.sha }}
+            # docker pull tanmaysalunke/myapp-backend:${{ github.sha }}
+            # docker-compose -f /var/www/CourseSwapApp/docker-compose.yml up -d
+
+            # Running Docker Compose
+            cd /var/www/CourseSwapApp
+            docker-compose down
+            docker-compose up -d
 
             # Debug: Check directory and files
             ls -al /var/www/CourseSwapApp
