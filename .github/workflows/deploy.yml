@@ -6,14 +6,14 @@ on:
       - master
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v1
+      # - name: Set up Docker
+      #   uses: docker/setup-buildx-action@v1
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
@@ -28,75 +28,30 @@ jobs:
           docker push tanmaysalunke/myapp-frontend:${{ github.sha }}
           docker push tanmaysalunke/myapp-backend:${{ github.sha }}
 
-      - name: Copy files to EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          source: |
-            course-swap-app/Dockerfile
-            course-swap-backend/Dockerfile
-            course-swap-app/package*.json
-            course-swap-backend/package*.json
-            docker-compose.yml
-          target: "/var/www/CourseSwapApp/"
-          port: 22
-          timeout: 30s
-          command_timeout: 10m
-          use_insecure_cipher: false
-          rm: false
-          debug: true # Enable debugging to get more detailed logs if needed
-          strip_components: 0
-          overwrite: false
-          tar_dereference: false
-          tar_exec: tar
-          proxy_port: 22
-          proxy_timeout: 30s
-          proxy_use_insecure_cipher: false
+  deploy:
+    needs: build
+    runs-on: aws-ec2
+    steps:
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
+      - name: Pull images from Docker Hub
+        run: |
+          docker pull tanmaysalunke/myapp-frontend:${{ github.sha }}
+          docker pull tanmaysalunke/myapp-backend:${{ github.sha }}
 
-            # Ensure Docker and Docker Compose are installed
-            sudo apt-get update && sudo apt-get install -y docker.io docker-compose
+      - name: Stop and remove old frontend container
+        run: |
+          docker rm -f reactFrontendContainer || true
 
-            # Setup environment and directories 
-            mkdir -p /var/www/CourseSwapApp/course-swap-app
-            mkdir -p /var/www/CourseSwapApp/course-swap-backend
+      - name: Stop and remove old backend container
+        run: |
+          docker rm -f reactBackendContainer || true
 
-            echo "Creating .env files and setting up Docker containers."
-            # Create .env for frontend
-            echo "REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}" > /var/www/CourseSwapApp/course-swap-app/.env
-            echo "REACT_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}" >> /var/www/CourseSwapApp/course-swap-app/.env
-            echo "REACT_APP_FIREBASE_PROJECT_ID=${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}" >> /var/www/CourseSwapApp/course-swap-app/.env
-            echo "REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}" >> /var/www/CourseSwapApp/course-swap-app/.env
-            echo "REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}" >> /var/www/CourseSwapApp/course-swap-app/.env
-            echo "REACT_APP_FIREBASE_APP_ID=${{ secrets.REACT_APP_FIREBASE_APP_ID }}" >> /var/www/CourseSwapApp/course-swap-app/.env
-            echo "REACT_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.REACT_APP_FIREBASE_MEASUREMENT_ID }}" >> /var/www/CourseSwapApp/course-swap-app/.env
+      - name: Run the frontend Docker container
+        run: |
+          docker run -d -p 3000:80 --name reactFrontendContainer tanmaysalunke/myapp-frontend:${{ github.sha }}
 
-            # Create .env for backend
-            echo "APP_PASSWORD=${{ secrets.APP_PASSWORD }}" > /var/www/CourseSwapApp/course-swap-backend/.env
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> /var/www/CourseSwapApp/course-swap-backend/.env
-            echo "INIT_REFRESH_TOKEN=${{ secrets.INIT_REFRESH_TOKEN }}" >> /var/www/CourseSwapApp/course-swap-backend/.env
-            echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> /var/www/CourseSwapApp/course-swap-backend/.env
-            echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> /var/www/CourseSwapApp/course-swap-backend/.env
-            echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> /var/www/CourseSwapApp/course-swap-backend/.env
-
-            # Pull Docker images and run docker-compose
-            # docker pull tanmaysalunke/myapp-frontend:${{ github.sha }}
-            # docker pull tanmaysalunke/myapp-backend:${{ github.sha }}
-            # docker-compose -f /var/www/CourseSwapApp/docker-compose.yml up -d
-
-            # Running Docker Compose
-            cd /var/www/CourseSwapApp
-            docker-compose down
-            docker-compose up -d
-
-            # Debug: Check directory and files
-            ls -al /var/www/CourseSwapApp
+      - name: Run the backend Docker container
+        run: |
+          docker run -d -p 5000:5000 --name reactBackendContainer tanmaysalunke/myapp-backend:${{ github.sha }}
