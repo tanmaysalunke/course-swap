@@ -80,8 +80,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            mkdir -p /var/www/CourseSwapApp/course-swap-app
-            mkdir -p /var/www/CourseSwapApp/course-swap-backend
 
             echo "Creating .env files and setting up Docker containers."
             # Create .env for frontend
