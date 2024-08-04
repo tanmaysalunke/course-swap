@@ -56,8 +56,11 @@ jobs:
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
-            docker service update --force course-swap-app
-            docker service update --force course-swap-backend
+
+            # Stop existing containers (if any) to free up ports
+            docker stop $(docker ps -q --filter ancestor=${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest) || true
+            docker stop $(docker ps -q --filter ancestor=${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest) || true
+
             docker run -d -p 3000:80 ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
             docker run -d -p 5000:5000 \
               --env-file /run/secrets/backend_env \
