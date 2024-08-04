@@ -43,7 +43,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          source: "course-swap-app/Dockerfile"
+          source: "/course-swap-app/Dockerfile"
           target: "/var/www/CourseSwapApp/course-swap-app/"
 
       - name: Copy backend package files to EC2
@@ -52,7 +52,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          source: "course-swap-backend/package*.json"
+          source: "/course-swap-backend/package*.json"
           target: "/var/www/CourseSwapApp/course-swap-backend/"
 
       - name: Copy frontend package files to EC2
@@ -61,7 +61,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          source: "course-swap-app/package*.json"
+          source: "/course-swap-app/package*.json"
           target: "/var/www/CourseSwapApp/course-swap-app/"
 
       - name: Copy backend/Dockerfile to EC2
@@ -70,7 +70,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          source: "course-swap-backend/Dockerfile"
+          source: "/course-swap-backend/Dockerfile"
           target: "/var/www/CourseSwapApp/course-swap-backend/"
 
       - name: Deploy to EC2
@@ -80,6 +80,8 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            mkdir -p /var/www/CourseSwapApp/course-swap-app
+            mkdir -p /var/www/CourseSwapApp/course-swap-backend
 
             echo "Creating .env files and setting up Docker containers."
             # Create .env for frontend
