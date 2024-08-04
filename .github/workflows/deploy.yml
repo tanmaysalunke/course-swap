@@ -35,11 +35,11 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           source: |
-            ./course-swap-app/Dockerfile
-            ./course-swap-backend/Dockerfile
-            ./course-swap-app/package*.json
-            ./course-swap-backend/package*.json
-            ./docker-compose.yml
+            course-swap-app/Dockerfile
+            course-swap-backend/Dockerfile
+            course-swap-app/package*.json
+            course-swap-backend/package*.json
+            docker-compose.yml
           target: "/var/www/CourseSwapApp/"
           port: 22
           timeout: 30s
