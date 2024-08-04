@@ -68,11 +68,18 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
 
-            # Stop existing containers (if any) to free up ports
-            docker stop $(docker ps -q --filter ancestor=${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest) || true
-            docker stop $(docker ps -q --filter ancestor=${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest) || true
+            # Stop existing containers
+            docker ps -q --filter ancestor=***/course-swap-app:latest | xargs -r docker stop
+            docker ps -q --filter ancestor=***/course-swap-backend:latest | xargs -r docker stop
+              
+            # Remove existing containers
+            docker ps -a -q --filter ancestor=***/course-swap-app:latest | xargs -r docker rm
+            docker ps -a -q --filter ancestor=***/course-swap-backend:latest | xargs -r docker rm
 
-            docker run -d -p 3000:80 ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
+            # Run the frontend container
+            docker run -d -p 3000:80 ***/course-swap-app:latest
+
+            # Run the backend container with environment file
             docker run -d -p 5000:5000 \
               --env-file /run/secrets/backend_env \
-              ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
+              ***/course-swap-backend:latest
