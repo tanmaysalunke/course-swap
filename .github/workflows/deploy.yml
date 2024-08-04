@@ -35,7 +35,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.2
         with:
           host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
+          username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
@@ -51,7 +51,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.2
         with:
           host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
+          username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
             echo ${{ secrets.APP_PASSWORD }} | docker secret create app_password -
