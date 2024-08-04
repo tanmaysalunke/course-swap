@@ -62,6 +62,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
+            # Pull latest images
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
 
