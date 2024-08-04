@@ -37,6 +37,24 @@ jobs:
           source: "docker-compose.yml"
           target: "/var/www/CourseSwapApp/"
 
+      - name: Copy frontend/Dockerfile to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "course-swap-app/Dockerfile"
+          target: "/var/www/CourseSwapApp/course-swap-app/"
+
+      - name: Copy backend/Dockerfile to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "course-swap-backend/Dockerfile"
+          target: "/var/www/CourseSwapApp/course-swap-backend/"
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
