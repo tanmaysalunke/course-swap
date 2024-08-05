@@ -69,6 +69,10 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
+
+            # Log in to Docker Hub
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
             # Pull latest images
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
@@ -79,13 +83,11 @@ jobs:
 
             # Run new Image
             # docker run -d --name course-swap-backend -p 5000:5000 yourdockerhubusername/course-swap-backend:latest
-            docker run -d -p 5000:5000 \
-              --env-file /home/ubuntu/backend_env \
-              ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
+            docker run -d -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
 
             # Stop and remove old Frontend image
             docker stop course-swap-app || true
             docker rm course-swap-app || true
 
             # Run new image
-            docker run -d --name course-swap-app -p 3000:3000 yourdockerhubusername/course-swap-app:latest
+            docker run -d --name course-swap-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
