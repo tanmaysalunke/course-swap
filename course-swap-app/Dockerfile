@@ -17,7 +17,6 @@ COPY . .
 RUN npm run build
 
 # Use Nginx to serve the React application
-FROM nginx:1.19-alpine
-COPY --from=build /usr/src/app/build /usr/share/nginx/html
-EXPOSE 80
+FROM nginx:alpine
+COPY build /usr/share/nginx/html
 CMD ["nginx", "-g", "daemon off;"]
