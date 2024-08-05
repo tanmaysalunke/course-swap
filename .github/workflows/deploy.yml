@@ -1,4 +1,4 @@
-name: Test Running Docker Containers with Environment File
+name: Full Deployment to EC2
 
 on:
   push:
@@ -6,20 +6,61 @@ on:
       - master
 
 jobs:
-  docker-run-test:
+  full-deployment:
     runs-on: ubuntu-latest
     steps:
-      - name: Docker Run Test
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker images
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest ./course-swap-app
+          docker push ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest ./course-swap-backend
+          docker push ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
+
+      - name: Transfer environment configuration to EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-            echo "Pulling Docker images..."
+            echo "Creating backend_env file..."
+            echo "APP_PASSWORD=${{ secrets.APP_PASSWORD }}" > backend_env
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> backend_env
+            echo "INIT_REFRESH_TOKEN=${{ secrets.INIT_REFRESH_TOKEN }}" >> backend_env
+            echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> backend_env
+            echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> backend_env
+            echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> backend_env
+            echo "FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" >> backend_env
+            scp -o StrictHostKeyChecking=no backend_env ubuntu@${{ secrets.HOST }}:/home/ubuntu/backend_env
+
+      - name: Deploy Docker containers
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "Pulling latest Docker images..."
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
-            echo "Running Docker containers with environment..."
+            echo "Stopping existing Docker containers..."
+            docker ps -q --filter ancestor=${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest | xargs -r docker stop
+            docker ps -q --filter ancestor=${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest | xargs -r docker stop
+            echo "Removing existing Docker containers..."
+            docker ps -a -q --filter ancestor=${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest | xargs -r docker rm
+            docker ps -a -q --filter ancestor=${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest | xargs -r docker rm
+            echo "Running Docker containers with environment file..."
             docker run -d -p 3000:80 --env-file /home/ubuntu/backend_env ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
             docker run -d -p 5000:5000 --env-file /home/ubuntu/backend_env ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
-            echo "Docker containers started successfully."
