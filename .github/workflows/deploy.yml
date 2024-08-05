@@ -1,4 +1,4 @@
-name: Test File Creation and SCP Transfer
+name: Test Docker Commands Execution
 
 on:
   push:
@@ -6,19 +6,18 @@ on:
       - master
 
 jobs:
-  scp-transfer-test:
+  docker-commands-test:
     runs-on: ubuntu-latest
     steps:
-      - name: SCP File Transfer Test
+      - name: Docker Commands Test
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-            echo "Creating a test file..."
-            echo "This is a test file created by GitHub Actions." > testfile.txt
-            echo "Transferring file..."
-            scp -o StrictHostKeyChecking=no testfile.txt ubuntu@${{ secrets.HOST }}:/home/ubuntu/testfile.txt
-            echo "File transfer successful."
-            rm testfile.txt  # Cleanup the local test file
+            echo "Pulling a Docker test image..."
+            docker pull hello-world
+            echo "Running Docker hello-world image..."
+            docker run hello-world
+            echo "Docker commands executed successfully."
