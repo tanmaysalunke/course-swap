@@ -50,8 +50,7 @@ jobs:
             echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> backend_env
             echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> backend_env
             echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> backend_env
-            # Use base64 encoding to handle complex JSON
-            echo "FIREBASE_SERVICE_ACCOUNT=$(echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' | base64 --decode | jq -c .)" >> backend_env
+            echo "FIREBASE_SERVICE_ACCOUNT=$(echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' | base64 --decode)" >> backend_env
 
             # Transfer backend_env to EC2
             scp -o StrictHostKeyChecking=no backend_env ubuntu@${{ secrets.HOST }}:/home/ubuntu/backend_env
