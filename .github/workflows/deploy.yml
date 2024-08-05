@@ -83,7 +83,10 @@ jobs:
 
             # Run new Image
             # docker run -d --name course-swap-backend -p 5000:5000 yourdockerhubusername/course-swap-backend:latest
-            docker run -d -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
+            docker run -d -p 5000:5000 \
+            -e MONGO_URI='${{ secrets.MONGO_URI }}' \
+            -e APP_PASSWORD='${{ secrets.APP_PASSWORD }}' \
+            ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
 
             # Stop and remove old Frontend image
             docker stop course-swap-app || true
