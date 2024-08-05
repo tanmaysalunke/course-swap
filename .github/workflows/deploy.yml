@@ -1,4 +1,4 @@
-name: Test Basic SSH Connectivity
+name: Test File Creation and SCP Transfer
 
 on:
   push:
@@ -6,14 +6,19 @@ on:
       - master
 
 jobs:
-  ssh-connection-test:
+  scp-transfer-test:
     runs-on: ubuntu-latest
     steps:
-      - name: SSH Connection Test
+      - name: SCP File Transfer Test
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-            echo "SSH connection established successfully."
+            echo "Creating a test file..."
+            echo "This is a test file created by GitHub Actions." > testfile.txt
+            echo "Transferring file..."
+            scp -o StrictHostKeyChecking=no testfile.txt ubuntu@${{ secrets.HOST }}:/home/ubuntu/testfile.txt
+            echo "File transfer successful."
+            rm testfile.txt  # Cleanup the local test file
