@@ -1,4 +1,4 @@
-name: Test Docker Commands Execution
+name: Test Environment File Creation and Transfer
 
 on:
   push:
@@ -6,18 +6,24 @@ on:
       - master
 
 jobs:
-  docker-commands-test:
+  env-file-setup:
     runs-on: ubuntu-latest
     steps:
-      - name: Docker Commands Test
+      - name: Environment File Test
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-            echo "Pulling a Docker test image..."
-            docker pull hello-world
-            echo "Running Docker hello-world image..."
-            docker run hello-world
-            echo "Docker commands executed successfully."
+            echo "Creating backend_env file..."
+            echo "APP_PASSWORD=${{ secrets.APP_PASSWORD }}" > backend_env
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> backend_env
+            echo "INIT_REFRESH_TOKEN=${{ secrets.INIT_REFRESH_TOKEN }}" >> backend_env
+            echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> backend_env
+            echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> backend_env
+            echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> backend_env
+            echo "FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" >> backend_env
+            echo "Transferring backend_env to EC2..."
+            scp -o StrictHostKeyChecking=no backend_env ubuntu@${{ secrets.HOST }}:/home/ubuntu/backend_env
+            echo "Environment file created and transferred successfully."
