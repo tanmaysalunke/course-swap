@@ -1,4 +1,4 @@
-name: Test SCP Command to EC2
+name: Test Basic SSH Connectivity
 
 on:
   push:
@@ -6,24 +6,14 @@ on:
       - master
 
 jobs:
-  test-scp:
+  ssh-connection-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Test SSH connection and SCP file to EC2
+      - name: SSH Connection Test
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-            echo "Disabling strict host key checking..."
-            mkdir -p ~/.ssh
-            echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-
-            echo "Testing SCP command..."
-            echo "This is a test file." > test_file.txt
-            scp -v -o StrictHostKeyChecking=no test_file.txt ubuntu@${{ secrets.HOST }}:/home/ubuntu/test_file.txt
-
-            echo "Checking if the file was transferred..."
-            ls -l /home/ubuntu/test_file.txt
-            echo "SCP test completed."
+            echo "SSH connection established successfully."
