@@ -50,7 +50,7 @@ jobs:
             echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> backend_env
             echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> backend_env
             echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> backend_env
-            echo "FIREBASE_SERVICE_ACCOUNT=$(echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT}}' | base64 --decode)" >> backend_env
+            echo "FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SERVICE_ACCOUNT}} >> backend_env
 
             # Transfer backend_env to EC2
             scp -o StrictHostKeyChecking=no backend_env ubuntu@${{ secrets.HOST }}:/home/ubuntu/backend_env
@@ -77,7 +77,10 @@ jobs:
             docker rm course-swap-backend || true
 
             # Run new Image
-            docker run -d --name course-swap-backend -p 5000:5000 yourdockerhubusername/course-swap-backend:latest
+            # docker run -d --name course-swap-backend -p 5000:5000 yourdockerhubusername/course-swap-backend:latest
+            docker run -d -p 5000:5000 \
+              --env-file /home/ubuntu/backend_env \
+              ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
 
             # Stop and remove old Frontend image
             docker stop course-swap-app || true
