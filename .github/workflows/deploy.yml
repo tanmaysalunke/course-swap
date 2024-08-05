@@ -28,8 +28,8 @@ jobs:
 
       - name: Build and push backend image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:${{ github.run_number }} ./course-swap-backend
-          docker push ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:${{ github.run_number }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest ./course-swap-backend
+          docker push ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
 
   deploy:
     needs: build
@@ -50,7 +50,7 @@ jobs:
             sudo service docker restart
 
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:${{ github.run_number }}
-            docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:${{ github.run_number }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
 
             docker stop course-swap-backend || true
             docker rm course-swap-backend || true
@@ -63,7 +63,7 @@ jobs:
               -e CLIENT_SECRET='${{ secrets.CLIENT_SECRET }}' \
               -e REDIRECT_URI='${{ secrets.REDIRECT_URI }}' \
               -e FIREBASE_SERVICE_ACCOUNT='${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' \
-              ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:${{ github.run_number }}
+              ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
 
             docker stop course-swap-app || true
             docker rm course-swap-app || true
