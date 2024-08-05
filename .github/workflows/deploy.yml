@@ -1,4 +1,4 @@
-name: Test Environment File Creation and Transfer
+name: Test Running Docker Containers with Environment File
 
 on:
   push:
@@ -6,24 +6,20 @@ on:
       - master
 
 jobs:
-  env-file-setup:
+  docker-run-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Environment File Test
+      - name: Docker Run Test
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-            echo "Creating backend_env file..."
-            echo "APP_PASSWORD=${{ secrets.APP_PASSWORD }}" > backend_env
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> backend_env
-            echo "INIT_REFRESH_TOKEN=${{ secrets.INIT_REFRESH_TOKEN }}" >> backend_env
-            echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> backend_env
-            echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> backend_env
-            echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> backend_env
-            echo "FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" >> backend_env
-            echo "Transferring backend_env to EC2..."
-            scp -o StrictHostKeyChecking=no backend_env ubuntu@${{ secrets.HOST }}:/home/ubuntu/backend_env
-            echo "Environment file created and transferred successfully."
+            echo "Pulling Docker images..."
+            docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
+            echo "Running Docker containers with environment..."
+            docker run -d -p 3000:80 --env-file /home/ubuntu/backend_env ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
+            docker run -d -p 5000:5000 --env-file /home/ubuntu/backend_env ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
+            echo "Docker containers started successfully."
