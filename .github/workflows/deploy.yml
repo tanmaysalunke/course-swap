@@ -1,4 +1,4 @@
-name: Test SSH and SCP
+name: Combined Steps Test
 
 on:
   push:
@@ -6,22 +6,29 @@ on:
       - master
 
 jobs:
-  test-ssh-scp:
+  combined-test:
     runs-on: ubuntu-latest
     steps:
-      - name: SSH and SCP Test
+      - name: SSH Setup and Environment File Test
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-            echo "Attempting to create a simple file on EC2..."
-            echo "This is a test from GitHub Actions." > ~/testfile.txt
-            echo "File creation success, listing directory contents..."
-            ls -l ~/
-            echo "Now attempting to SCP a file..."
-            echo "Sample content for SCP test" > sample.txt
-            scp -v -o StrictHostKeyChecking=no sample.txt ubuntu@${{ secrets.HOST }}:/home/ubuntu/
-            echo "SCP command executed, checking file presence..."
-            ls -l /home/ubuntu/sample.txt
+            echo "Setting up SSH..."
+            mkdir -p ~/.ssh
+            echo "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+            echo "Creating backend_env file..."
+            echo "APP_PASSWORD=${{ secrets.APP_PASSWORD }}" > backend_env
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> backend_env
+            echo "INIT_REFRESH_TOKEN=${{ secrets.INIT_REFRESH_TOKEN }}" >> backend_env
+            echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> backend_env
+            echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> backend_env
+            echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> backend_env
+            echo "FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" >> backend_env
+            echo "Transferring backend_env to EC2..."
+            scp -o StrictHostKeyChecking=no backend_env ubuntu@${{ secrets.HOST }}:/home/ubuntu/backend_env
+            echo "Running Docker containers..."
+            docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
+            docker run -d -p 3000:80 --env-file /home/ubuntu/backend_env ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
