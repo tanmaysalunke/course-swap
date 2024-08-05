@@ -86,6 +86,11 @@ jobs:
             docker run -d -p 5000:5000 \
             -e MONGO_URI='${{ secrets.MONGO_URI }}' \
             -e APP_PASSWORD='${{ secrets.APP_PASSWORD }}' \
+            -e INIT_REFRESH_TOKEN='${{ secrets.INIT_REFRESH_TOKEN }}' \
+            -e CLIENT_ID='${{ secrets.CLIENT_ID }}' \
+            -e CLIENT_SECRET='${{ secrets.CLIENT_SECRET }}' \
+            -e REDIRECT_URI='${{ secrets.REDIRECT_URI }}' \
+            -e FIREBASE_SERVICE_ACCOUNT='${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' \
             ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
 
             # Stop and remove old Frontend image
