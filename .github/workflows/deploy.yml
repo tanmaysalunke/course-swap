@@ -23,38 +23,14 @@ jobs:
 
       - name: Build and push frontend image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest ./course-swap-app
-          docker push ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/course-swap-app:${{ github.run_number }} ./course-swap-app
+          docker push ${{ secrets.DOCKER_USERNAME }}/course-swap-app:${{ github.run_number }}
 
       - name: Build and push backend image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest ./course-swap-backend
-          docker push ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:${{ github.run_number }} ./course-swap-backend
+          docker push ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:${{ github.run_number }}
 
-      # - name: Set up Docker secrets on EC2
-      #   uses: appleboy/ssh-action@v0.1.7
-      #   with:
-      #     host: ${{ secrets.HOST }}
-      #     username: ubuntu
-      #     key: ${{ secrets.SSH_KEY }}
-      #     script: |
-      #       set -e
-      #       # Disable strict host key checking
-      #       mkdir -p ~/.ssh
-      #       echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-
-      #       # Create backend_env file
-      #       echo "APP_PASSWORD=${{ secrets.APP_PASSWORD }}" > backend_env
-      #       echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> backend_env
-      #       echo "INIT_REFRESH_TOKEN=${{ secrets.INIT_REFRESH_TOKEN }}" >> backend_env
-      #       echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> backend_env
-      #       echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> backend_env
-      #       echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> backend_env
-      #       echo -n "FIREBASE_SERVICE_ACCOUNT=" >> backend_env
-      #       echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" | base64 -d >> backend_env
-
-      #       # Transfer backend_env to EC2
-      #       scp -o StrictHostKeyChecking=no backend_env ubuntu@${{ secrets.HOST }}:/home/ubuntu/backend_env
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -69,32 +45,25 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-
-            # Log in to Docker Hub
             echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-            # Pull latest images
-            docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
-            docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:${{ github.run_number }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:${{ github.run_number }}
 
-            # Stop and remove old image
             docker stop course-swap-backend || true
             docker rm course-swap-backend || true
 
-            # Run new Backend Image
             docker run -d -p 5000:5000 \
-            -e MONGO_URI='${{ secrets.MONGO_URI }}' \
-            -e APP_PASSWORD='${{ secrets.APP_PASSWORD }}' \
-            -e INIT_REFRESH_TOKEN='${{ secrets.INIT_REFRESH_TOKEN }}' \
-            -e CLIENT_ID='${{ secrets.CLIENT_ID }}' \
-            -e CLIENT_SECRET='${{ secrets.CLIENT_SECRET }}' \
-            -e REDIRECT_URI='${{ secrets.REDIRECT_URI }}' \
-            -e FIREBASE_SERVICE_ACCOUNT='${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' \
-            ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
+              -e MONGO_URI='${{ secrets.MONGO_URI }}' \
+              -e APP_PASSWORD='${{ secrets.APP_PASSWORD }}' \
+              -e INIT_REFRESH_TOKEN='${{ secrets.INIT_REFRESH_TOKEN }}' \
+              -e CLIENT_ID='${{ secrets.CLIENT_ID }}' \
+              -e CLIENT_SECRET='${{ secrets.CLIENT_SECRET }}' \
+              -e REDIRECT_URI='${{ secrets.REDIRECT_URI }}' \
+              -e FIREBASE_SERVICE_ACCOUNT='${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' \
+              ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:${{ github.run_number }}
 
-            # Stop and remove old Frontend image
             docker stop course-swap-app || true
             docker rm course-swap-app || true
 
-            # Run new image
-            docker run -d --name course-swap-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
+            docker run -d --name course-swap-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/course-swap-app:${{ github.run_number }}
