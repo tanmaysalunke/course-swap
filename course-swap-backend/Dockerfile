@@ -14,10 +14,10 @@ RUN npm install
 COPY . .
 
 # Make port available to the world outside this container
-EXPOSE 5000
+EXPOSE 3000
 
 # Define environment variable
-ENV NODE_ENV production
+# ENV NODE_ENV production
 
 # Run the app when the container launches
 CMD ["node", "app.js"]
