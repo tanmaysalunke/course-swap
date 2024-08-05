@@ -1,4 +1,4 @@
-name: Combined Steps Test
+name: Test Deployment to EC2
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  combined-test:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: SSH Setup and Environment File Test
@@ -26,8 +26,7 @@ jobs:
             echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> backend_env
             echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> backend_env
             echo "REDIRECT_URI=${{ secrets.REDIRECT_URI }}" >> backend_env
-            echo "FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" >> backend_env
-            echo "Transferring backend_env to EC2..."
+            echo "FIREBASE_SERVICE_ACCOUNT=$(echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" | jq -c .)" >> backend_env
             scp -o StrictHostKeyChecking=no backend_env ubuntu@${{ secrets.HOST }}:/home/ubuntu/backend_env
             echo "Running Docker containers..."
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:latest
