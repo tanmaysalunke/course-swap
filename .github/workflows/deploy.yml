@@ -49,13 +49,15 @@ jobs:
 
             sudo service docker restart
 
+            docker network create app-network || true
+
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-app:${{ github.run_number }}
             docker pull ${{ secrets.DOCKER_USERNAME }}/course-swap-backend:latest
 
             docker stop course-swap-backend || true
             docker rm course-swap-backend || true
 
-            docker run -d -p 5000:5000 \
+            docker run -d --network app-network -p 5000:5000 \
               -e MONGO_URI='${{ secrets.MONGO_URI }}' \
               -e APP_PASSWORD='${{ secrets.APP_PASSWORD }}' \
               -e INIT_REFRESH_TOKEN='${{ secrets.INIT_REFRESH_TOKEN }}' \
@@ -68,4 +70,4 @@ jobs:
             docker stop course-swap-app || true
             docker rm course-swap-app || true
 
-            docker run -d --name course-swap-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/course-swap-app:${{ github.run_number }}
+            docker run -d --network app-network --name course-swap-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/course-swap-app:${{ github.run_number }}
