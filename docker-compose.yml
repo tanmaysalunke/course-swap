@@ -1,5 +1,6 @@
 services:
   backend:
+    image: tanmaysalunke/backend:latest
     build:
       context: ./course-swap-backend
       dockerfile: Dockerfile
@@ -17,6 +18,7 @@ services:
     networks:
       - app-network
   frontend:
+    image: tanmaysalunke/frontend:latest
     build: 
       context: ./course-swap-app
       dockerfile: Dockerfile
