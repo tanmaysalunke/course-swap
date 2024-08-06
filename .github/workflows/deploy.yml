@@ -30,6 +30,14 @@ jobs:
         run: |
           docker-compose build
           docker-compose push
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          INIT_REFRESH_TOKEN: ${{ secrets.INIT_REFRESH_TOKEN }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REDIRECT_URI: ${{ secrets.REDIRECT_URI }}
 
   deploy:
     needs: build

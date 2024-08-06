@@ -6,16 +6,14 @@ services:
     ports:
       - "5000:5000"
     command: /bin/sh -c "env && node app.js"
-    env_file:
-      - ./course-swap-backend/.env
-    # environment:
-    #   - FIREBASE_SERVICE_ACCOUNT
-    #   - APP_PASSWORD
-    #   - MONGO_URI
-    #   - INIT_REFRESH_TOKEN
-    #   - CLIENT_ID
-    #   - CLIENT_SECRET
-    #   - REDIRECT_URI
+    environment:
+      MONGO_URI: ${MONGO_URI}
+      APP_PASSWORD: ${APP_PASSWORD}
+      FIREBASE_SERVICE_ACCOUNT: ${FIREBASE_SERVICE_ACCOUNT}
+      INIT_REFRESH_TOKEN: ${INIT_REFRESH_TOKEN}
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      REDIRECT_URI: ${REDIRECT_URI}
     networks:
       - app-network
   frontend:
