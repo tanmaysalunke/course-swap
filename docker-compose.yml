@@ -23,7 +23,7 @@ services:
       context: ./course-swap-app
       dockerfile: Dockerfile
     ports:
-      - "3000:80"
+      - "80:80"
     networks:
       - app-network
 
