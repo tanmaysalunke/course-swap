@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Make port available to the world outside this container
-EXPOSE 5555
+EXPOSE 5000
 
 # Define environment variable
 # ENV NODE_ENV production
