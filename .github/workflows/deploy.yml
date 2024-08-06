@@ -56,4 +56,5 @@ jobs:
           script: |
             docker pull tanmaysalunke/backend:latest
             docker pull tanmaysalunke/frontend:latest
+            docker run -d --name frontend -p 3000:80 tanmaysalunke/frontend:latest
           debug: true
