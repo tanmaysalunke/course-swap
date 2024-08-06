@@ -8,14 +8,14 @@ services:
     command: /bin/sh -c "env && node app.js"
     env_file:
       - ./course-swap-backend/.env
-    environment:
-      - FIREBASE_SERVICE_ACCOUNT
-      - APP_PASSWORD
-      - MONGO_URI
-      - INIT_REFRESH_TOKEN
-      - CLIENT_ID
-      - CLIENT_SECRET
-      - REDIRECT_URI
+    # environment:
+    #   - FIREBASE_SERVICE_ACCOUNT
+    #   - APP_PASSWORD
+    #   - MONGO_URI
+    #   - INIT_REFRESH_TOKEN
+    #   - CLIENT_ID
+    #   - CLIENT_SECRET
+    #   - REDIRECT_URI
     networks:
       - app-network
   frontend:

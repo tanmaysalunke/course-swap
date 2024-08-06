@@ -5,7 +5,7 @@ FROM node:alpine3.18
 WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json
-COPY package.json ./
+COPY package*.json ./
 
 # Install any needed packages
 RUN npm install
