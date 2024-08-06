@@ -15,10 +15,8 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v1
 
-      - name: Install Docker Compose
-        run: |
-          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
+      - name: Set up Docker Compose
+        uses: docker/setup-compose-action@v1
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -44,14 +42,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Deploy to EC2
+      - name: Deploy with SSH (Debug Enabled)
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
-          username: ubuntu
+          username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
             docker-compose pull
             docker-compose up -d
+          debug: true
