@@ -9,6 +9,8 @@ RUN npm install
 
 COPY . .
 
+COPY .env .env
+
 RUN npm run build && ls -l /app/build
 
 # Production stage
