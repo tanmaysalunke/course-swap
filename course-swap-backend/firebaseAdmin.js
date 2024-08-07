@@ -1,6 +1,4 @@
 const admin = require("firebase-admin");
-console.log("FIREBASE_SERVICE_ACCOUNT:", process.env.FIREBASE_SERVICE_ACCOUNT);
-console.log("OTHER KEY:", process.env.APP_PASSWORD);
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 admin.initializeApp({
