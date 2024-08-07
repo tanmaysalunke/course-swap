@@ -16,8 +16,5 @@ COPY . .
 # Make port available to the world outside this container
 EXPOSE 5000
 
-# Define environment variable
-# ENV NODE_ENV production
-
 # Run the app when the container launches
 CMD ["npm", "run", "start"]
