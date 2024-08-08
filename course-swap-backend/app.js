@@ -30,7 +30,7 @@ const io = socketIo(server, {
     methods: ["GET", "POST"],
     credentials: true,
   },
-  // transports: ["websocket", "polling"],
+  transports: ["websocket", "polling"],
 });
 
 app.use(express.json());
@@ -39,6 +39,9 @@ app.use(cors());
 // Socket.io configuration
 io.on("connection", (socket) => {
   console.log("New client connected");
+  socket.on("error", (error) => {
+    console.error("WebSocket connection error:", error);
+  });
 
   socket.on("requestToConnect", async (data) => {
     console.log("Request to connect received:", data);
