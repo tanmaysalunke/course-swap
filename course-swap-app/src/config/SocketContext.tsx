@@ -62,6 +62,9 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
       reconnectionAttempts: 5,
       reconnectionDelay: 2000,
     });
+    newSocket.on("connect_error", (err) => {
+      console.error("Connection Error:", err);
+    });
     setSocket(newSocket);
 
     newSocket.on("connect", () => {
