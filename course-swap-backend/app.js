@@ -30,7 +30,7 @@ const io = socketIo(server, {
     methods: ["GET", "POST"],
     credentials: true,
   },
-  transports: ["websocket", "polling"],
+  // transports: ["websocket", "polling"],
 });
 
 app.use(express.json());
