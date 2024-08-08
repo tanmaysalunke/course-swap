@@ -465,7 +465,7 @@ app.get("/api/matches", authenticate, async (req, res) => {
 });
 
 // Listen to the server instance, not the app instance
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
