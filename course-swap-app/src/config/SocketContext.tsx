@@ -56,7 +56,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   const userEmail = user?.email;
 
   useEffect(() => {
-    const newSocket = io("http://54.67.32.217:5000", {
+    const newSocket = io("http://backend:5000", {
       transports: ["websocket", "polling"],
       reconnection: true,
       reconnectionAttempts: 5,
