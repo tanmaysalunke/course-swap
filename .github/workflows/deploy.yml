@@ -54,6 +54,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Create Docker network
+        run: docker network create my-network || true
+
       - name: Deploy with SSH (Debug Enabled)
         uses: appleboy/ssh-action@v0.1.5
         with:
