@@ -26,7 +26,7 @@ const socketIo = require("socket.io");
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "ws://frontend:80", // The origin where your React app is running
+    origin: "*", // The origin where your React app is running
     methods: ["GET", "POST"],
     credentials: true,
   },
