@@ -16,7 +16,7 @@ services:
       CLIENT_SECRET: ${CLIENT_SECRET}
       REDIRECT_URI: ${REDIRECT_URI}
     networks:
-      - app-network
+      - my-network
   frontend:
     build:
       context: ./course-swap-app
@@ -43,8 +43,8 @@ services:
     ports:
       - "80:80"
     networks:
-      - app-network
+      - my-network
 
 networks:
-  app-network:
+  my-network:
     driver: bridge
