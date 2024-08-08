@@ -5,7 +5,7 @@ services:
       context: ./course-swap-backend
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"
+      - "5001:5000"
     command: /bin/sh -c "env && node app.js"
     environment:
       MONGO_URI: ${MONGO_URI}
