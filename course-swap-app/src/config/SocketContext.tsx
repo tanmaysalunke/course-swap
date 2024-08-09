@@ -68,7 +68,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     setSocket(newSocket);
 
     newSocket.on("connect", () => {
-      console.log("Socket connected!");
+      console.log("Socket connected!!");
       if (userEmail) {
         console.log("Requesting notifications for", userEmail);
         newSocket.emit("requestNotifications", userEmail);
