@@ -64,7 +64,7 @@ function Profile() {
   }, [authToken, loading, navigate]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/matches", {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/matches`, {
       headers: {
         Authorization: `Bearer ${authToken}`, // Assuming you're using a Bearer token
       },
