@@ -27,10 +27,10 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: "*", // The origin where your React app is running
-    methods: ["GET", "POST"],
-    credentials: true,
+    // methods: ["GET", "POST"],
+    // credentials: true,
   },
-  transports: ["websocket", "polling"],
+  // transports: ["websocket", "polling"],
 });
 
 app.use(express.json());
