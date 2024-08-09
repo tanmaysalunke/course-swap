@@ -22,7 +22,7 @@ const CourseList = () => {
   const { authToken, loading } = useAuth();
 
   useEffect(() => {
-    fetch("http://54.67.32.217:5000/api/courses")
+    fetch("${process.env.REACT_APP_API_BASE_URL}/courses")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
