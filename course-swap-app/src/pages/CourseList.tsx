@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../config/Firebase";
-// import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -32,9 +31,8 @@ const CourseList = () => {
       .then(setCourses)
       .catch((error) => {
         console.error("Error fetching courses:", error);
-        // Here you might want to update the UI to reflect the error
       });
-  }, []); // Empty dependency array means this effect runs only once after the initial render
+  }, []);
 
   // handle send to have
   const [haveCourses, setHaveCourses] = useState<Course[]>([]);
@@ -158,7 +156,7 @@ const CourseList = () => {
           </span>
           <input
             type="search"
-            className="py-2 text-sm rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900"
+            className="py-2 text-sm rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900 z-0"
             placeholder="Search Courses..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
