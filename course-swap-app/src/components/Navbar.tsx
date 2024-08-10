@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { auth } from "../config/Firebase";
@@ -53,8 +53,29 @@ const Navbar = () => {
     setIsModalOpen(false);
   };
 
+  const [scrolled, setScrolled] = useState(false);
+
+  const handleScroll = () => {
+    if (window.scrollY > 50) {
+      setScrolled(true);
+    } else {
+      setScrolled(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <nav className="border-gray-200 bg-gray-900">
+    <nav
+      className={`border-gray-200 bg-gray-900 sticky top-0 transition-all duration-300 z-50 ${
+        scrolled ? "m-0" : "m-2 rounded-3xl"
+      }`}
+    >
       {/*  ----------Site Name and Logo---------- */}
       <div className="max-w-screen-xl flex flex-wrap justify-between mx-auto p-4">
         <div className="flex items-center space-x-3 rtl:space-x-reverse">
