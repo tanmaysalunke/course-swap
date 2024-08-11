@@ -14,10 +14,10 @@ services:
       INIT_REFRESH_TOKEN: ${INIT_REFRESH_TOKEN}
       CLIENT_ID: ${CLIENT_ID}
       CLIENT_SECRET: ${CLIENT_SECRET}
-      REDIRECT_URI: ${REDIRECT_URI}
+      REDIRECT_URI: ${REDIRECT_URI} 
     networks:
       - my-network
-      
+
   frontend:
     build:
       context: ./course-swap-app
@@ -48,11 +48,16 @@ services:
       - my-network
   
   nginx:
-    build: ./nginx
+    build:
+      context: ./nginx
     ports:
       - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - frontend
+    networks:
+      - my-network
 
 networks:
   my-network:

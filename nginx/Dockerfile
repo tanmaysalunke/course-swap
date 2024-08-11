@@ -5,7 +5,7 @@ FROM nginx:alpine
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy the Nginx configuration file
-COPY default.conf /etc/nginx/conf.d/
+COPY default.conf /etc/nginx/conf.d/default.conf
 
 # Expose port for HTTP
 EXPOSE 80
