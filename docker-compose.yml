@@ -50,8 +50,7 @@ services:
   nginx:
     build:
       context: ./nginx
-    image: 
-      - tanmaysalunke/nginx-custom:latest
+    image: tanmaysalunke/nginx-custom:latest
     ports:
       - "80:80"
     volumes:
