@@ -68,9 +68,8 @@ jobs:
             docker stop frontend backend nginx-custom || true
             docker rm frontend backend nginx-custom || true
             docker network create my-network || true
-            docker run -d --name frontend --network my-network -p 80:80 ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+            docker run -d --name frontend --network my-network -p 8080:80 ${{ secrets.DOCKER_USERNAME }}/frontend:latest
 
-            # Run the Nginx container
             docker run -d --name nginx-custom --network my-network -p 80:80 ${{ secrets.DOCKER_USERNAME }}/nginx-custom:latest
 
             docker run -d --name backend --network my-network -p 5000:5000 \
