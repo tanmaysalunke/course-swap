@@ -2,3 +2,4 @@ course-swap-backend/config/firebaseServiceAccountKey.json
 course-swap-backend/config/.credentials.json
 course-swap-backend/.env
 course-swap-app/.env
+EC2script.yaml
