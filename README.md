@@ -8,7 +8,6 @@ Course Swap is a cutting-edge platform designed specifically for ASU CS graduate
 - [Features](#features)
 - [How to Use](#how-to-use)
 - [Technologies](#technologies)
-- [Contributing](#contributing)
 - [Contact](#contact)
 - [License](#license)
 
@@ -47,10 +46,6 @@ Course Swap is a cutting-edge platform designed specifically for ASU CS graduate
 - **Deployment:** Docker for containerization and AWS EC2 for cloud hosting.
 - **CI/CD:** GitHub Actions for continuous integration and delivery.
 - **Data Scraping:** Puppeteer for automated scraping of course details.
-
-## Contributing
-
-We welcome contributions from the community. Please refer to our contributing guidelines for more information on how to participate.
 
 ## Contact
 
