@@ -49,7 +49,7 @@ Course Swap is a cutting-edge platform designed specifically for ASU CS graduate
 
 ## Contact
 
-For more information or support, please email us at [contact@courseswap.example.com](mailto:tanmaysalunke4@gmail.com).
+For more information or support, please email us at [tanmaysalunke4@gmail.com](mailto:tanmaysalunke4@gmail.com).
 
 ## License
 
